@@ -18,6 +18,14 @@
 #'
 #' getAmendments(years, bills, as.xml = FALSE)
 getAmendments <- function(biennium, billNumber, as.xml = FALSE) {
+  if(!all(grepl(biennium_pattern, biennium))) {
+    stop("Biennium formatted incorrectly. Use ?getAmendments for more information")
+  } else if(!all(as.numeric(substr(biennium,1,4)) >= 1991)) {
+    stop("Biennium out of range. Information is available going back to 1991-92")
+  } else if(!all(grepl(billNum_pattern, billNumber))) {
+    stop("Bill Number formatted incorrectly. Use ?getAmendments for more information")
+  }
+
   if(length(biennium) == length(billNumber)) {
     request <- data.frame(biennium = biennium, billNumber = billNumber)
   } else {
@@ -28,7 +36,11 @@ getAmendments <- function(biennium, billNumber, as.xml = FALSE) {
                 "legislationservice.asmx/GetAmendmentsForBiennium?biennium=",
                 request[1,1], "&billNumber=", request[1,2], sep = "")
 
-  tbl <- XML::xmlParse(path)
+  tbl <- tryCatch(XML::xmlParse(path),
+                  error = function(e){
+                    e$message <- errMessage
+                    stop(e)
+                  })
 
   if(as.xml) {
     out <- tbl
@@ -46,7 +58,11 @@ getAmendments <- function(biennium, billNumber, as.xml = FALSE) {
                     "legislationservice.asmx/GetAmendmentsForBiennium?biennium=",
                     request[bill,1], "&billNumber=", request[bill,2], sep = "")
 
-      tbl <- XML::xmlParse(path)
+      tbl <- tryCatch(XML::xmlParse(path),
+                      error = function(e){
+                        e$message <- errMessage
+                        stop(e)
+                      })
 
       if(as.xml) {
         out <- c(out,tbl)

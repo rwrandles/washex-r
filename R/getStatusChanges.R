@@ -12,6 +12,14 @@
 #' @examples
 #' getStatusChanges("2007-08", "1001", as.xml = FALSE)
 getStatusChanges <- function(biennium, billNumber, as.xml = FALSE) {
+  if(!all(grepl(biennium_pattern, biennium))) {
+    stop("Biennium formatted incorrectly. Use ?getStatusChanges for more information")
+  } else if(!all(as.numeric(substr(biennium,1,4)) >= 1991)) {
+    stop("Biennium out of range. Information is available going back to 1991-92")
+  } else if(!all(grepl(billNum_pattern, billNumber))) {
+    stop("Bill Number formatted incorrectly. Use ?getStatusChanges for more information")
+  }
+
   if(length(biennium) == length(billNumber)) {
     request <- data.frame(biennium = biennium, billId = billNumber)
   } else {
@@ -26,7 +34,11 @@ getStatusChanges <- function(biennium, billNumber, as.xml = FALSE) {
                 gsub(" ", "%20", request[1,1]), "&billNumber=", gsub(" ", "%20", request[1,2]),
                 "&beginDate=", beginDate, "&endDate=", endDate, sep="")
 
-  tbl <- XML::xmlParse(path)
+  tbl <- tryCatch(XML::xmlParse(path),
+                  error = function(e){
+                    e$message <- errMessage
+                    stop(e)
+                  })
 
   if(as.xml) {
     out <- tbl
@@ -47,7 +59,11 @@ getStatusChanges <- function(biennium, billNumber, as.xml = FALSE) {
                     gsub(" ", "%20", request[bill,1]), "&billNumber=", gsub(" ", "%20", request[bill,2]),
                     "&beginDate=", beginDate, "&endDate=", endDate, sep="")
 
-      tbl <- XML::xmlParse(path)
+      tbl <- tryCatch(XML::xmlParse(path),
+                      error = function(e){
+                        e$message <- errMessage
+                        stop(e)
+                      })
 
       if(as.xml) {
         out <- c(out,tbl)

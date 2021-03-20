@@ -27,9 +27,23 @@
 #'     revisions will be made to help facilitate the XML parsing and
 #'     potentially allow for compatibility with dataframes.
 getRollCalls <- function(biennium, billNumber) {
+  if(!all(grepl(biennium_pattern, biennium))) {
+    stop("Biennium formatted incorrectly. Use ?getRollCalls for more information")
+  } else if(!all(as.numeric(substr(biennium,1,4)) >= 1991)) {
+    stop("Biennium out of range. Information is available going back to 1991-92")
+  } else if(!all(grepl(billNum_pattern, billNumber))) {
+    stop("Bill Number formatted incorrectly. Use ?getRollCalls for more information")
+  }
+
   path <- paste(prefix,
                 "legislationservice.asmx/GetRollCalls?biennium=",
                 biennium, "&billNumber=", billNumber, sep = "")
 
-  return(XML::xmlTreeParse(path)[["doc"]][["ArrayOfRollCall"]])
+  out <- tryCatch(XML::xmlTreeParse(path)[["doc"]][["ArrayOfRollCall"]],
+           error = function(e){
+             e$message <- errMessage
+             stop(e)
+           })
+
+  return(out)
 }

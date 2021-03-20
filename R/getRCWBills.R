@@ -15,6 +15,14 @@
 #' @examples
 #' getRCWBills("2007-08", "13.40.0357")
 getRCWBills <- function(biennium, rcwCite, as.xml = FALSE) {
+  if(!all(grepl(biennium_pattern, biennium))) {
+    stop("Biennium formatted incorrectly. Use ?getLegislation for more information")
+  } else if(!all(as.numeric(substr(biennium,1,4)) >= 1991)) {
+    stop("Biennium out of range. Information is available going back to 1991-92")
+  } else if(!all(grepl(rcw_pattern, rcwCite))) {
+    stop("RCW reference formatted incorrectly. Use ?getRCWBills for more information")
+  }
+
   if(length(biennium) == length(rcwCite)) {
     request <- data.frame(biennium = biennium, rcwCite = rcwCite)
   } else {
@@ -25,7 +33,11 @@ getRCWBills <- function(biennium, rcwCite, as.xml = FALSE) {
                 "RcwCiteAffectedService.asmx/GetLegislationAffectingRcw?biennium=",
                 request[1,1], "&rcwCite=", request[1,2], sep = "")
 
-  tbl <- XML::xmlParse(path)
+  tbl <- tryCatch(XML::xmlParse(path),
+                  error = function(e){
+                    e$message <- errMessage
+                    stop(e)
+                  })
 
   if(as.xml) {
     out <- tbl
@@ -42,7 +54,11 @@ getRCWBills <- function(biennium, rcwCite, as.xml = FALSE) {
                     "RcwCiteAffectedService.asmx/GetLegislationAffectingRcw?biennium=",
                     request[bill,1], "&rcwCite=", request[bill,2], sep = "")
 
-      tbl <- XML::xmlParse(path)
+      tbl <- tryCatch(XML::xmlParse(path),
+                      error = function(e){
+                        e$message <- errMessage
+                        stop(e)
+                      })
 
       if(as.xml) {
         out <- c(out,tbl)

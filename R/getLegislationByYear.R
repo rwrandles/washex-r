@@ -12,10 +12,20 @@
 #' @examples
 #' getLegislationByYear("2007")
 getLegislationByYear <- function(year,as.xml = FALSE) {
+  if(!all(grepl(year_pattern, year))) {
+    stop("Year formatted incorrectly. Use ?getLegislationByYear for more information")
+  } else if(!all(as.numeric(year) >= 1991)) {
+    stop("Year out of range. Information is available going back to 1991")
+  }
+
   path <- paste(prefix, "legislationservice.asmx/GetLegislationByYear?year=",
                 gsub(" ", "%20", year[1]), sep = "")
 
-  tbl <- XML::xmlParse(path)
+  tbl <- tryCatch(XML::xmlParse(path),
+                  error = function(e){
+                    e$message <- errMessage
+                    stop(e)
+                  })
 
   if(as.xml) {
     out <- tbl
@@ -29,7 +39,11 @@ getLegislationByYear <- function(year,as.xml = FALSE) {
       path <- paste(prefix, "legislationservice.asmx/GetLegislationByYear?year=",
                     gsub(" ", "%20", year[i]), sep = "")
 
-      tbl <- XML::xmlParse(path)
+      tbl <- tryCatch(XML::xmlParse(path),
+                      error = function(e){
+                        e$message <- errMessage
+                        stop(e)
+                      })
 
       if(as.xml) {
         out <- c(out,tbl)

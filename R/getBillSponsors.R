@@ -15,6 +15,14 @@
 #' spons <- getBillSponsors("2007-08", c("HB 1001", "HB 1002", "HB 1003"))
 #' spons <- subset(spons, Type == "Primary")
 getBillSponsors <- function(biennium, billId, as.xml = FALSE) {
+  if(!all(grepl(biennium_pattern, biennium))) {
+    stop("Biennium formatted incorrectly. Use ?getBillSponsors for more information")
+  } else if(!all(as.numeric(substr(biennium,1,4)) >= 1991)) {
+    stop("Biennium out of range. Information is available going back to 1991-92")
+  } else if(!all(grepl(billId_pattern, billId))) {
+    stop("Bill ID formatted incorrectly. Use ?getBillSponsors for more information")
+  }
+
   if(length(biennium) == length(billId)) {
     request <- data.frame(biennium = biennium, billId = billId)
   } else {
@@ -25,7 +33,11 @@ getBillSponsors <- function(biennium, billId, as.xml = FALSE) {
                 "legislationservice.asmx/GetSponsors?biennium=",
                 request[1,1], "&billId=", request[1,2], sep = "")
 
-  tbl <- XML::xmlParse(path)
+  tbl <- tryCatch(XML::xmlParse(path),
+                  error = function(e){
+                    e$message <- errMessage
+                    stop(e)
+                  })
 
   if(as.xml) {
     out <- tbl
@@ -42,7 +54,11 @@ getBillSponsors <- function(biennium, billId, as.xml = FALSE) {
                     "legislationservice.asmx/GetSponsors?biennium=",
                     request[bill,1], "&billId=", request[bill,2], sep = "")
 
-      tbl <- XML::xmlParse(path)
+      tbl <- tryCatch(XML::xmlParse(path),
+                      error = function(e){
+                        e$message <- errMessage
+                        stop(e)
+                      })
 
       if(as.xml) {
         out <- c(out,tbl)

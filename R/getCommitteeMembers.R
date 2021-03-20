@@ -16,6 +16,19 @@
 #'
 #' getCommitteeMembers(years,agency = "House",comms)
 getCommitteeMembers <- function(biennium, agency, name, as.xml = FALSE) {
+  if(!all(grepl(biennium_pattern, biennium))) {
+    stop("Biennium formatted incorrectly. Use ?getCommitteeMembers for more information")
+  } else if(!all(as.numeric(substr(biennium,1,4)) >= 1991)) {
+    stop("Biennium out of range. Information is available going back to 1991-92")
+  }
+
+  agency <- paste(toupper(substr(agency,1,1)),
+                  substr(agency,2,nchar(agency)), sep = "")
+
+  if(!all(agency %in% c("House", "Senate"))) {
+    stop("Agency name invalid. Make sure to use one of 'House' or 'Senate'")
+  }
+
   if(length(biennium) == length(agency) &
      length(biennium) == length(name)) {
     request <- data.frame(biennium = biennium, agency = agency, name = name)
@@ -28,7 +41,11 @@ getCommitteeMembers <- function(biennium, agency, name, as.xml = FALSE) {
                 request[1,1], "&agency=", request[1,2], "&committeeName=",
                 gsub("&", "%26", gsub(" ", "%20", request[1,3])), sep = "")
 
-  tbl <- XML::xmlParse(path)
+  tbl <- tryCatch(XML::xmlParse(path),
+                  error = function(e){
+                    e$message <- errMessage
+                    stop(e)
+                  })
 
   if(as.xml) {
     out <- tbl
@@ -47,7 +64,11 @@ getCommitteeMembers <- function(biennium, agency, name, as.xml = FALSE) {
                     request[bill,1], "&agency=", request[bill,2], "&committeeName=",
                     gsub("&", "%26", gsub(" ", "%20", request[bill,3])), sep = "")
 
-      tbl <- XML::xmlParse(path)
+      tbl <- tryCatch(XML::xmlParse(path),
+                      error = function(e){
+                        e$message <- errMessage
+                        stop(e)
+                      })
 
       if(as.xml) {
         out <- c(out,tbl)

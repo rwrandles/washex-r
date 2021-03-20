@@ -29,6 +29,5 @@ getAffectedRCW("2005-06", "HB 1427", as.xml = TRUE)
 ## generates a dataframe of affected codes from all bills in 2007-08
 bills <- getLegislationByYear(c("2007","2008"))
 
-## not run
 \dontrun{codesAffected <- getAffectedRCW("2007-08", bills$BillId)}
 }

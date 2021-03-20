@@ -16,6 +16,14 @@
 #'     was never passed, it lists the most recent status. To
 #'     get a bill's complete history, use \code{\link{getStatusChanges}}
 getCurrentStatus <- function(biennium, billNumber, as.xml = FALSE) {
+  if(!all(grepl(biennium_pattern, biennium))) {
+    stop("Biennium formatted incorrectly. Use ?getCurrentStatus for more information")
+  } else if(!all(as.numeric(substr(biennium,1,4)) >= 1991)) {
+    stop("Biennium out of range. Information is available going back to 1991-92")
+  } else if(!all(grepl(billNum_pattern, billNumber))) {
+    stop("Bill Number formatted incorrectly. Use ?getCurrentStatus for more information")
+  }
+
   if(length(biennium) == length(billNumber)) {
     request <- data.frame(biennium = biennium, billNumber = billNumber)
   } else {
@@ -26,7 +34,11 @@ getCurrentStatus <- function(biennium, billNumber, as.xml = FALSE) {
                 gsub(" ", "%20", request[1,1]), "&billNumber=",
                 gsub(" ", "%20", request[1,2]), sep = "")
 
-  tbl <- XML::xmlParse(path)
+  tbl <- tryCatch(XML::xmlParse(path),
+                  error = function(e){
+                    e$message <- errMessage
+                    stop(e)
+                  })
 
   if(as.xml) {
     out <- tbl
@@ -44,7 +56,11 @@ getCurrentStatus <- function(biennium, billNumber, as.xml = FALSE) {
                     gsub(" ", "%20", request[bill,1]), "&billNumber=",
                     gsub(" ", "%20", request[bill,2]), sep = "")
 
-      tbl <- XML::xmlParse(path)
+      tbl <- tryCatch(XML::xmlParse(path),
+                      error = function(e){
+                        e$message <- errMessage
+                        stop(e)
+                      })
 
       if(as.xml) {
         out <- c(out,tbl)

@@ -18,6 +18,14 @@
 #'      may be made in order to help with the cleaning process and potentially
 #'      allow for better compatibility with dataframes.
 getHearings <- function(biennium, billNumber, as.xml = FALSE) {
+  if(!all(grepl(biennium_pattern, biennium))) {
+    stop("Biennium formatted incorrectly. Use ?getHearings for more information")
+  } else if(!all(as.numeric(substr(biennium,1,4)) >= 1991)) {
+    stop("Biennium out of range. Information is available going back to 1991-92")
+  } else if(!all(grepl(billNum_pattern, billNumber))) {
+    stop("Bill Number formatted incorrectly. Use ?getHearings for more information")
+  }
+
   if(length(biennium) == length(billNumber)) {
     request <- data.frame(biennium = biennium, billNumber = billNumber)
   } else {
@@ -27,7 +35,11 @@ getHearings <- function(biennium, billNumber, as.xml = FALSE) {
                 "legislationservice.asmx/GetHearings?biennium=",
                 request[1,1], "&billNumber=", request[1,2], sep = "")
 
-  tbl <- XML::xmlParse(path)
+  tbl <- tryCatch(XML::xmlParse(path),
+                  error = function(e){
+                    e$message <- errMessage
+                    stop(e)
+                  })
 
   if(as.xml) {
     out <- tbl
@@ -41,7 +53,11 @@ getHearings <- function(biennium, billNumber, as.xml = FALSE) {
                     "legislationservice.asmx/GetHearings?biennium=",
                     request[bill,1], "&billNumber=", request[bill,2], sep = "")
 
-      tbl <- XML::xmlParse(path)
+      tbl <- tryCatch(XML::xmlParse(path),
+                      error = function(e){
+                        e$message <- errMessage
+                        stop(e)
+                      })
 
       if(!as.xml) {
         tbl <- list("Bill"=XML::xmlToList(tbl))

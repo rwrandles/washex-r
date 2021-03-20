@@ -15,9 +15,16 @@
 #' ## generates a dataframe of affected codes from all bills in 2007-08
 #' bills <- getLegislationByYear(c("2007","2008"))
 #'
-#' ## not run
 #' \dontrun{codesAffected <- getAffectedRCW("2007-08", bills$BillId)}
 getAffectedRCW <- function(biennium, billId, as.xml = FALSE) {
+  if(!all(grepl(biennium_pattern, biennium))) {
+    stop("Biennium formatted incorrectly. Use ?getAffectedRCW for more information")
+  } else if(!all(as.numeric(substr(biennium,1,4)) >= 1991)) {
+    stop("Biennium out of range. Information is available going back to 1991-92")
+  } else if(!all(grepl(billId_pattern, billId))) {
+    stop("Bill ID formatted incorrectly. Use ?getAffectedRCW for more information")
+  }
+
   if(length(biennium) == length(billId)) {
     request <- data.frame(biennium = biennium, billId = billId)
   } else {
@@ -28,7 +35,11 @@ getAffectedRCW <- function(biennium, billId, as.xml = FALSE) {
                 "legislationservice.asmx/GetRcwCitesAffected?biennium=",
                 request[1,1], "&billId=", gsub(" ", "%20", request[1,2]), sep = "")
 
-  tbl <- XML::xmlParse(path)
+  tbl <- tryCatch(XML::xmlParse(path),
+                  error = function(e){
+                    e$message <- errMessage
+                    stop(e)
+                  })
 
   if(as.xml) {
     out <- tbl
@@ -45,7 +56,11 @@ getAffectedRCW <- function(biennium, billId, as.xml = FALSE) {
                     "legislationservice.asmx/GetRcwCitesAffected?biennium=",
                     request[bill,1], "&billId=", gsub(" ", "%20", request[bill,2]), sep = "")
 
-      tbl <- XML::xmlParse(path)
+      tbl <- tryCatch(XML::xmlParse(path),
+                      error = function(e){
+                        e$message <- errMessage
+                        stop(e)
+                      })
 
       if(as.xml) {
         out <- c(out,tbl)

@@ -11,11 +11,21 @@
 #' @examples
 #' getSponsors("2007-08")
 getSponsors <- function(biennium, as.xml = FALSE) {
+  if(!all(grepl(biennium_pattern, biennium))) {
+    stop("Biennium formatted incorrectly. Use ?getSponsors for more information")
+  } else if(!all(as.numeric(substr(biennium,1,4)) >= 1991)) {
+    stop("Biennium out of range. Information is available going back to 1991-92")
+  }
+
   path <- paste(prefix,
                 "sponsorservice.asmx/GetSponsors?biennium=",
                 biennium[1], sep = "")
 
-  tbl <- XML::xmlParse(path)
+  tbl <- tryCatch(XML::xmlParse(path),
+                  error = function(e){
+                    e$message <- errMessage
+                    stop(e)
+                  })
 
   if(as.xml) {
     out <- tbl
@@ -31,7 +41,11 @@ getSponsors <- function(biennium, as.xml = FALSE) {
                     "sponsorservice.asmx/GetSponsors?biennium=",
                     biennium[i], sep = "")
 
-      tbl <- XML::xmlParse(path)
+      tbl <- tryCatch(XML::xmlParse(path),
+                      error = function(e){
+                        e$message <- errMessage
+                        stop(e)
+                      })
 
       if(as.xml) {
         out <- c(out,tbl)
