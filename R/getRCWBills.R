@@ -14,7 +14,7 @@
 #'
 #' @examples
 #' getRCWBills("2007-08", "13.40.0357")
-getRCWBills <- function(biennium, rcwCite, as.xml = FALSE) {
+getRCWBills <- function(biennium, rcwCite, paired = FALSE, as.xml = FALSE) {
   if(!all(grepl(biennium_pattern, biennium))) {
     stop("Biennium formatted incorrectly. Use ?getLegislation for more information")
   } else if(!all(as.numeric(substr(biennium,1,4)) >= 1991)) {
@@ -23,7 +23,7 @@ getRCWBills <- function(biennium, rcwCite, as.xml = FALSE) {
     stop("RCW reference formatted incorrectly. Use ?getRCWBills for more information")
   }
 
-  if(length(biennium) == length(rcwCite)) {
+  if(length(biennium) == length(rcwCite) & paired) {
     request <- data.frame(biennium = biennium, rcwCite = rcwCite)
   } else {
     request <- expand.grid(biennium, rcwCite, KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)

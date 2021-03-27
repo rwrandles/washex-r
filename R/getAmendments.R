@@ -17,7 +17,7 @@
 #' bills <- c(1447,1219,1001,2680)
 #'
 #' getAmendments(years, bills, as.xml = FALSE)
-getAmendments <- function(biennium, billNumber, as.xml = FALSE) {
+getAmendments <- function(biennium, billNumber, paired = TRUE, as.xml = FALSE) {
   if(!all(grepl(biennium_pattern, biennium))) {
     stop("Biennium formatted incorrectly. Use ?getAmendments for more information")
   } else if(!all(as.numeric(substr(biennium,1,4)) >= 1991)) {
@@ -26,7 +26,7 @@ getAmendments <- function(biennium, billNumber, as.xml = FALSE) {
     stop("Bill Number formatted incorrectly. Use ?getAmendments for more information")
   }
 
-  if(length(biennium) == length(billNumber)) {
+  if(length(biennium) == length(billNumber) & paired) {
     request <- data.frame(biennium = biennium, billNumber = billNumber)
   } else {
     request <- expand.grid(biennium, billNumber, KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)

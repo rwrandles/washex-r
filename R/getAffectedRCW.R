@@ -16,7 +16,7 @@
 #' bills <- getLegislationByYear(c("2007","2008"))
 #'
 #' \dontrun{codesAffected <- getAffectedRCW("2007-08", bills$BillId)}
-getAffectedRCW <- function(biennium, billId, as.xml = FALSE) {
+getAffectedRCW <- function(biennium, billId, paired = TRUE, as.xml = FALSE) {
   if(!all(grepl(biennium_pattern, biennium))) {
     stop("Biennium formatted incorrectly. Use ?getAffectedRCW for more information")
   } else if(!all(as.numeric(substr(biennium,1,4)) >= 1991)) {
@@ -25,7 +25,7 @@ getAffectedRCW <- function(biennium, billId, as.xml = FALSE) {
     stop("Bill ID formatted incorrectly. Use ?getAffectedRCW for more information")
   }
 
-  if(length(biennium) == length(billId)) {
+  if(length(biennium) == length(billId) & paired) {
     request <- data.frame(biennium = biennium, billId = billId)
   } else {
     request <- expand.grid(biennium, billId, KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)

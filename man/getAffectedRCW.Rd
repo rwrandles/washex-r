@@ -4,7 +4,7 @@
 \alias{getAffectedRCW}
 \title{Link bills to Revised Code of Washington (RCW)}
 \usage{
-getAffectedRCW(biennium, billId, as.xml = FALSE)
+getAffectedRCW(biennium, billId, paired = TRUE, as.xml = FALSE)
 }
 \arguments{
 \item{biennium}{either a string or character vector of the form "XXXX-YY"}

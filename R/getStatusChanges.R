@@ -11,7 +11,7 @@
 #'
 #' @examples
 #' getStatusChanges("2007-08", "1001", as.xml = FALSE)
-getStatusChanges <- function(biennium, billNumber, as.xml = FALSE) {
+getStatusChanges <- function(biennium, billNumber, paired = TRUE, as.xml = FALSE) {
   if(!all(grepl(biennium_pattern, biennium))) {
     stop("Biennium formatted incorrectly. Use ?getStatusChanges for more information")
   } else if(!all(as.numeric(substr(biennium,1,4)) >= 1991)) {
@@ -20,7 +20,7 @@ getStatusChanges <- function(biennium, billNumber, as.xml = FALSE) {
     stop("Bill Number formatted incorrectly. Use ?getStatusChanges for more information")
   }
 
-  if(length(biennium) == length(billNumber)) {
+  if(length(biennium) == length & paired) {
     request <- data.frame(biennium = biennium, billId = billNumber)
   } else {
     request <- expand.grid(biennium, billNumber, KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)

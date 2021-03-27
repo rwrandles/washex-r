@@ -4,7 +4,7 @@
 \alias{getRCWBills}
 \title{Search for bills based on Revised Code (RCW) citations}
 \usage{
-getRCWBills(biennium, rcwCite, as.xml = FALSE)
+getRCWBills(biennium, rcwCite, paired = FALSE, as.xml = FALSE)
 }
 \arguments{
 \item{biennium}{either a string or character vector of the form "XXXX-YY"}
@@ -12,6 +12,9 @@ getRCWBills(biennium, rcwCite, as.xml = FALSE)
 \item{rcwCite}{character string (or vector) for the citation (optional extensions
 for title, chapter, or section) in the RCW to pull legislation
 from}
+
+\item{paired}{when TRUE, assumes that equal length vectors represent paired data and
+will be treated as such. Set to FALSE to generate an NxN grid of input arguments}
 
 \item{as.xml}{set to TRUE for raw XML (defaults to FALSE)}
 }

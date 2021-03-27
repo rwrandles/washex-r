@@ -15,7 +15,7 @@
 #' comms <- c("Education","Judiciary","Rules")
 #'
 #' getCommitteeMembers(years,agency = "House",comms)
-getCommitteeMembers <- function(biennium, agency, name, as.xml = FALSE) {
+getCommitteeMembers <- function(biennium, agency, name, paired = FALSE, as.xml = FALSE) {
   if(!all(grepl(biennium_pattern, biennium))) {
     stop("Biennium formatted incorrectly. Use ?getCommitteeMembers for more information")
   } else if(!all(as.numeric(substr(biennium,1,4)) >= 1991)) {
@@ -30,7 +30,7 @@ getCommitteeMembers <- function(biennium, agency, name, as.xml = FALSE) {
   }
 
   if(length(biennium) == length(agency) &
-     length(biennium) == length(name)) {
+     length(biennium) == length(name) & paired) {
     request <- data.frame(biennium = biennium, agency = agency, name = name)
   } else {
     request <- expand.grid(biennium, agency, name, KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)

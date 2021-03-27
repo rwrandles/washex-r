@@ -4,12 +4,15 @@
 \alias{getLegislationSigned}
 \title{Get all bills signed into law}
 \usage{
-getLegislationSigned(biennium, agency, as.xml = FALSE)
+getLegislationSigned(biennium, agency, paired = FALSE, as.xml = FALSE)
 }
 \arguments{
 \item{biennium}{either a string or character vector of the form "XXXX-YY"}
 
 \item{agency}{either "House" or "Senate", or a vector of agencies}
+
+\item{paired}{when TRUE, assumes that equal length vectors represent paired data and
+will be treated as such. Set to FALSE to generate an NxN grid of input arguments}
 
 \item{as.xml}{set to TRUE for raw XML (defaults to FALSE)}
 }

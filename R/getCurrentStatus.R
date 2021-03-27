@@ -15,7 +15,7 @@
 #' This function returns the bill's status as of today. If a bill
 #'     was never passed, it lists the most recent status. To
 #'     get a bill's complete history, use \code{\link{getStatusChanges}}
-getCurrentStatus <- function(biennium, billNumber, as.xml = FALSE) {
+getCurrentStatus <- function(biennium, billNumber, paired = TRUE, as.xml = FALSE) {
   if(!all(grepl(biennium_pattern, biennium))) {
     stop("Biennium formatted incorrectly. Use ?getCurrentStatus for more information")
   } else if(!all(as.numeric(substr(biennium,1,4)) >= 1991)) {
@@ -24,7 +24,7 @@ getCurrentStatus <- function(biennium, billNumber, as.xml = FALSE) {
     stop("Bill Number formatted incorrectly. Use ?getCurrentStatus for more information")
   }
 
-  if(length(biennium) == length(billNumber)) {
+  if(length(biennium) == length(billNumber) & paired) {
     request <- data.frame(biennium = biennium, billNumber = billNumber)
   } else {
     request <- expand.grid(biennium, billNumber, KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)

@@ -7,6 +7,8 @@
 #' @param biennium either a string or character vector of the form "XXXX-YY"
 #' @param billNumber an integer or character string or vector containing
 #'      the bill numbers to retrieve
+#' @param paired when TRUE, assumes that equal length vectors represent paired data and
+#'      will be treated as such. Set to FALSE to generate an NxN grid of input arguments
 #' @param as.xml set to TRUE for raw XML (defaults to FALSE)
 #'
 #' @return By default, returns a dataframe. If \code{as.xml = TRUE}, then
@@ -16,7 +18,7 @@
 #' @examples
 #' getLegislation("2007-08", "1001")
 #' getLegislation("2007-08", 1001, as.xml = TRUE)
-getLegislation <- function(biennium, billNumber, as.xml = FALSE) {
+getLegislation <- function(biennium, billNumber, paired = TRUE, as.xml = FALSE) {
   if(!all(grepl(biennium_pattern, biennium))) {
     stop("Biennium formatted incorrectly. Use ?getLegislation for more information")
   } else if(!all(as.numeric(substr(biennium,1,4)) >= 1991)) {
@@ -25,7 +27,7 @@ getLegislation <- function(biennium, billNumber, as.xml = FALSE) {
     stop("Bill Number formatted incorrectly. Use ?getLegislation for more information")
   }
 
-  if(length(biennium) == length(billNumber)) {
+  if(length(biennium) == length(billNumber) & paired) {
     request <- data.frame(biennium = biennium, billId = billNumber)
   } else {
     request <- expand.grid(biennium, billNumber, KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)

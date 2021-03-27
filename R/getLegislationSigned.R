@@ -11,7 +11,7 @@
 #'
 #' @examples
 #' getLegislationSigned("2007-08", "Senate", as.xml = TRUE)
-getLegislationSigned <- function(biennium, agency, as.xml = FALSE) {
+getLegislationSigned <- function(biennium, agency, paired = FALSE, as.xml = FALSE) {
   if(!all(grepl(biennium_pattern, biennium))) {
     stop("Biennium formatted incorrectly. Use ?getLegislationSigned for more information")
   } else if(!all(as.numeric(substr(biennium,1,4)) >= 1991)) {
@@ -25,7 +25,7 @@ getLegislationSigned <- function(biennium, agency, as.xml = FALSE) {
     stop("Agency name invalid. Make sure to use one of 'House' or 'Senate'")
   }
 
-  if(length(biennium) == length(agency)) {
+  if(length(biennium) == length(agency) & paired) {
     request <- data.frame(biennium = biennium, agency = agency)
   } else {
     request <- expand.grid(biennium, agency, KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)

@@ -17,7 +17,7 @@
 #'      package's conversion to the dataframe format. Future revisions
 #'      may be made in order to help with the cleaning process and potentially
 #'      allow for better compatibility with dataframes.
-getHearings <- function(biennium, billNumber, as.xml = FALSE) {
+getHearings <- function(biennium, billNumber, paired = TRUE, as.xml = FALSE) {
   if(!all(grepl(biennium_pattern, biennium))) {
     stop("Biennium formatted incorrectly. Use ?getHearings for more information")
   } else if(!all(as.numeric(substr(biennium,1,4)) >= 1991)) {
@@ -26,7 +26,7 @@ getHearings <- function(biennium, billNumber, as.xml = FALSE) {
     stop("Bill Number formatted incorrectly. Use ?getHearings for more information")
   }
 
-  if(length(biennium) == length(billNumber)) {
+  if(length(biennium) == length(billNumber) & paired) {
     request <- data.frame(biennium = biennium, billNumber = billNumber)
   } else {
     request <- expand.grid(biennium, billNumber, KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)

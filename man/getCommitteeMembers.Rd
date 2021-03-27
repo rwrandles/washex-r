@@ -4,7 +4,7 @@
 \alias{getCommitteeMembers}
 \title{Get committee members}
 \usage{
-getCommitteeMembers(biennium, agency, name, as.xml = FALSE)
+getCommitteeMembers(biennium, agency, name, paired = FALSE, as.xml = FALSE)
 }
 \arguments{
 \item{biennium}{either a string or character vector of the form "XXXX-YY"}
@@ -13,6 +13,9 @@ getCommitteeMembers(biennium, agency, name, as.xml = FALSE)
 
 \item{name}{name of the committee or vector of committee names
 (for a list of committee names, see \code{\link{getCommittees}})}
+
+\item{paired}{when TRUE, assumes that equal length vectors represent paired data and
+will be treated as such. Set to FALSE to generate an NxN grid of input arguments}
 
 \item{as.xml}{set to TRUE for raw XML (defaults to FALSE)}
 }

@@ -4,13 +4,16 @@
 \alias{getHearings}
 \title{Get hearings regarding a bill}
 \usage{
-getHearings(biennium, billNumber, as.xml = FALSE)
+getHearings(biennium, billNumber, paired = TRUE, as.xml = FALSE)
 }
 \arguments{
 \item{biennium}{either a string or character vector of the form "XXXX-YY"}
 
 \item{billNumber}{an integer or character string or vector containing
 the bill numbers to retrieve}
+
+\item{paired}{when TRUE, assumes that equal length vectors represent paired data and
+will be treated as such. Set to FALSE to generate an NxN grid of input arguments}
 
 \item{as.xml}{set to TRUE for raw XML (defaults to FALSE)}
 }
