@@ -17,7 +17,8 @@
 #'
 #' @examples
 #' getLegislation("2007-08", "1001")
-#' getLegislation("2007-08", 1001, as.xml = TRUE)
+#'
+#' \dontrun{getLegislation("2007-08", 1001:1100, as.xml = TRUE)}
 getLegislation <- function(biennium, billNumber, paired = TRUE, as.xml = FALSE) {
   if(!all(grepl(biennium_pattern, biennium))) {
     stop("Biennium formatted incorrectly. Use ?getLegislation for more information")

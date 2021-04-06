@@ -31,5 +31,5 @@ Get committee members
 years <- c("2011-12","2013-14","2015-16","2017-18")
 comms <- c("Education","Judiciary","Rules")
 
-getCommitteeMembers(years,agency = "House",comms)
+getCommitteeMembers(years, agency = "House", comms)
 }

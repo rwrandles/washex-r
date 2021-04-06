@@ -14,7 +14,7 @@
 #' years <- c("2011-12","2013-14","2015-16","2017-18")
 #' comms <- c("Education","Judiciary","Rules")
 #'
-#' getCommitteeMembers(years,agency = "House",comms)
+#' getCommitteeMembers(years, agency = "House", comms)
 getCommitteeMembers <- function(biennium, agency, name, paired = FALSE, as.xml = FALSE) {
   if(!all(grepl(biennium_pattern, biennium))) {
     stop("Biennium formatted incorrectly. Use ?getCommitteeMembers for more information")

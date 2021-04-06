@@ -3,6 +3,7 @@
 #' Get a listing of all RCW citations affected by a given bill
 #'
 #' @inheritParams getBillSponsors
+#' @inheritParams getLegislation
 #'
 #' @return By default, returns a dataframe. If \code{as.xml = TRUE}, then
 #'     returns the raw XML

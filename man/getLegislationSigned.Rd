@@ -25,5 +25,7 @@ Get a dataframe containing all of the bills that originated in a
 given chamber and were eventually signed into law
 }
 \examples{
-getLegislationSigned("2007-08", "Senate", as.xml = TRUE)
+## get all bills signed into law between 2007-2012
+bienniums <- c("2007-08", "2009-10", "2011-12")
+getLegislationSigned(bienniums, c("House", "Senate"))
 }

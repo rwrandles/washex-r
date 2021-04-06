@@ -10,7 +10,11 @@
 #' @export
 #'
 #' @examples
-#' getHearings("2007-08", "1001", as.xml = FALSE)
+#' ## get hearings for all senate bills in 2011-12
+#' bills <- getLegislationByYear(c("2011", "2012"))
+#' billsSenate <- subset(bills, OriginalAgency == "Senate")
+#'
+#' \dontrun{getHearings(billsSenate$Biennium, billsSenate$BillNumber, paired = TRUE)}
 #'
 #' @section Note: The resulting XML documents contain multiple
 #'      nested lists. As such, it is not currently compatible with the XML

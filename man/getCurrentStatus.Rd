@@ -34,4 +34,8 @@ get a bill's complete history, use \code{\link{getStatusChanges}}
 \examples{
 getCurrentStatus("2007-08", "1001")
 
+## get final status for all bills written in 2011 or 2012
+billNums <- rbind(getLegislationByYear("2011"), getLegislationByYear("2012"))
+\dontrun{status <- getCurrentStatus("2011-12", billNums$billNumber)}
+
 }

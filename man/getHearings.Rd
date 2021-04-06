@@ -34,6 +34,10 @@ allow for better compatibility with dataframes.
 }
 
 \examples{
-getHearings("2007-08", "1001", as.xml = FALSE)
+## get hearings for all senate bills in 2011-12
+bills <- getLegislationByYear(c("2011", "2012"))
+billsSenate <- subset(bills, OriginalAgency == "Senate")
+
+\dontrun{getHearings(billsSenate$Biennium, billsSenate$BillNumber, paired = TRUE)}
 
 }

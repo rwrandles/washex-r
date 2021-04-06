@@ -28,5 +28,6 @@ description
 }
 \examples{
 getLegislation("2007-08", "1001")
-getLegislation("2007-08", 1001, as.xml = TRUE)
+
+\dontrun{getLegislation("2007-08", 1001:1100, as.xml = TRUE)}
 }

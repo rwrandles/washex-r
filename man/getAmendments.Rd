@@ -26,11 +26,12 @@ Get a list of all proposed amendments (accepted and rejected) on the bill,
 including the URL to the amendment text
 }
 \examples{
+## get amendments for a single bill
 getAmendments("2007-08", "1001", as.xml = FALSE)
 
 ## get amendments for a specific set of bills
 years <- c("2005-06","2007-08","2007-08","2009-10")
 bills <- c(1447,1219,1001,2680)
 
-getAmendments(years, bills, as.xml = FALSE)
+getAmendments(years, bills, paired = TRUE, as.xml = FALSE)
 }
