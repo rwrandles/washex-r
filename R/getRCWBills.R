@@ -1,12 +1,13 @@
 #' Search for bills based on Revised Code (RCW) citations
 #'
-#' Get a list of all bills which reference or amend the Revised Code of
-#'     Washington (RCW)
+#' Get a list of all bills which reference or amend a particular
+#'      portion of the Revised Code of Washington (RCW)
 #'
 #' @inheritParams getLegislation
-#' @param rcwCite character string (or vector) for the citation (optional extensions
-#'     for title, chapter, or section) in the RCW to pull legislation
-#'     from
+#' @param rcwCite Character vector for the citation in the RCW to pull
+#'      legislation from. Optional extensions for title, chapter, and section
+#'      are allowed. For more information, see
+#'      \url{https://apps.leg.wa.gov/rcw/}
 #'
 #' @return default, returns a dataframe. If \code{as.xml = TRUE}, then
 #'     returns the raw XML

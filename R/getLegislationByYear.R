@@ -3,7 +3,8 @@
 #' Get a list of all bills introduced during the year
 #'
 #' @inheritParams getLegislation
-#' @param year an integer or character string or vector for the given year
+#' @param year Character or numeric vector representing the year(s) to be
+#'      searched.
 #'
 #' @return By default, returns a dataframe. If \code{as.xml = TRUE}, then
 #'     returns the raw XML

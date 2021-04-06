@@ -7,10 +7,11 @@
 getRollCalls(biennium, billNumber)
 }
 \arguments{
-\item{biennium}{either a string or character vector of the form "XXXX-YY"}
+\item{biennium}{Character vector representing the biennium(s) to be
+searched. Each argument should take the form "XXXX-YY"}
 
-\item{billNumber}{an integer or character string or vector containing
-the bill numbers to retrieve}
+\item{billNumber}{Character or numeric vector containing the bill number(s)
+to be retrieved.}
 }
 \value{
 Currently, returns an XML array containing all roll call votes.

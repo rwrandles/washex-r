@@ -7,9 +7,11 @@
 getLegislationByYear(year, as.xml = FALSE)
 }
 \arguments{
-\item{year}{an integer or character string or vector for the given year}
+\item{year}{Character or numeric vector representing the year(s) to be
+searched.}
 
-\item{as.xml}{set to TRUE for raw XML (defaults to FALSE)}
+\item{as.xml}{If TRUE, returns data in XML format. Otherwise parses data
+into dataframe format.}
 }
 \value{
 By default, returns a dataframe. If \code{as.xml = TRUE}, then

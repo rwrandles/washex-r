@@ -1,9 +1,9 @@
 #' Get sponsor information for a bill
 #'
 #' @inheritParams getLegislation
-#' @param billId a string or vector of character strings of the format
-#'     "XX YYYY", where XX is the prefix (HB, SB, etc.) and YYYY is the
-#'     bill number
+#' @param billId Character vector containing the bill(s) to be retrieved.
+#'      Each argument should take the form "XX YYYY", where XX
+#'      is the prefix (HB, SB, etc.) and YYYY is the bill number.
 #'
 #' @return By default, returns a dataframe. If \code{as.xml = TRUE}, then
 #'     returns the raw XML

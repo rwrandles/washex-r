@@ -7,14 +7,18 @@
 getLegislationSigned(biennium, agency, paired = FALSE, as.xml = FALSE)
 }
 \arguments{
-\item{biennium}{either a string or character vector of the form "XXXX-YY"}
+\item{biennium}{Character vector representing the biennium(s) to be
+searched. Each argument should take the form "XXXX-YY"}
 
-\item{agency}{either "House" or "Senate", or a vector of agencies}
+\item{agency}{One of "House" or "Senate", or a vector with these as its
+elements.}
 
-\item{paired}{when TRUE, assumes that equal length vectors represent paired data and
-will be treated as such. Set to FALSE to generate an NxN grid of input arguments}
+\item{paired}{If TRUE, will assume that equal length vectors represent
+paired data. Set to FALSE to generate an NxN grid of input
+arguments. Applies to equal length vector inputs only.}
 
-\item{as.xml}{set to TRUE for raw XML (defaults to FALSE)}
+\item{as.xml}{If TRUE, returns data in XML format. Otherwise parses data
+into dataframe format.}
 }
 \value{
 By default, returns a dataframe. If \code{as.xml = TRUE}, then

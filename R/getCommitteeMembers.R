@@ -1,9 +1,10 @@
 #' Get committee members
 #'
 #' @inheritParams getLegislation
-#' @param agency either "House" or "Senate", or a vector of agencies
-#' @param name name of the committee or vector of committee names
-#'     (for a list of committee names, see \code{\link{getCommittees}})
+#' @param agency One of "House" or "Senate", or a vector with these as its
+#'      elements.
+#' @param name Character vector of committee names. To get the committee names
+#'      for a particular session, see \code{\link{getCommittees}}.
 #'
 #' @return By default, returns a dataframe. If \code{as.xml = TRUE}, then
 #'     returns the raw XML
@@ -15,7 +16,7 @@
 #' comms <- c("Education","Judiciary","Rules")
 #'
 #' getCommitteeMembers(years, agency = "House", comms)
-getCommitteeMembers <- function(biennium, agency, name, paired = FALSE, as.xml = FALSE) {
+getCommitteeMembers <- function(biennium, agency = c("House", "Senate"), name, paired = FALSE, as.xml = FALSE) {
   if(!all(grepl(biennium_pattern, biennium))) {
     stop("Biennium formatted incorrectly. Use ?getCommitteeMembers for more information")
   } else if(!all(as.numeric(substr(biennium,1,4)) >= 1991)) {

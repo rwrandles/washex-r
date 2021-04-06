@@ -7,24 +7,28 @@
 getRCWBills(biennium, rcwCite, paired = FALSE, as.xml = FALSE)
 }
 \arguments{
-\item{biennium}{either a string or character vector of the form "XXXX-YY"}
+\item{biennium}{Character vector representing the biennium(s) to be
+searched. Each argument should take the form "XXXX-YY"}
 
-\item{rcwCite}{character string (or vector) for the citation (optional extensions
-for title, chapter, or section) in the RCW to pull legislation
-from}
+\item{rcwCite}{Character vector for the citation in the RCW to pull
+legislation from. Optional extensions for title, chapter, and section
+are allowed. For more information, see
+\url{https://apps.leg.wa.gov/rcw/}}
 
-\item{paired}{when TRUE, assumes that equal length vectors represent paired data and
-will be treated as such. Set to FALSE to generate an NxN grid of input arguments}
+\item{paired}{If TRUE, will assume that equal length vectors represent
+paired data. Set to FALSE to generate an NxN grid of input
+arguments. Applies to equal length vector inputs only.}
 
-\item{as.xml}{set to TRUE for raw XML (defaults to FALSE)}
+\item{as.xml}{If TRUE, returns data in XML format. Otherwise parses data
+into dataframe format.}
 }
 \value{
 default, returns a dataframe. If \code{as.xml = TRUE}, then
 returns the raw XML
 }
 \description{
-Get a list of all bills which reference or amend the Revised Code of
-Washington (RCW)
+Get a list of all bills which reference or amend a particular
+portion of the Revised Code of Washington (RCW)
 }
 \examples{
 getRCWBills("2007-08", "13.40.0357")
