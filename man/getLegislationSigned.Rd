@@ -4,7 +4,12 @@
 \alias{getLegislationSigned}
 \title{Get all bills signed into law}
 \usage{
-getLegislationSigned(biennium, agency, paired = FALSE, as.xml = FALSE)
+getLegislationSigned(
+  biennium,
+  agency = c("House", "Senate"),
+  paired = FALSE,
+  as.xml = FALSE
+)
 }
 \arguments{
 \item{biennium}{Character vector representing the biennium(s) to be

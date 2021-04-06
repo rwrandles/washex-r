@@ -13,7 +13,7 @@
 #' ## get all bills signed into law between 2007-2012
 #' bienniums <- c("2007-08", "2009-10", "2011-12")
 #' getLegislationSigned(bienniums, c("House", "Senate"))
-getLegislationSigned <- function(biennium, agency, paired = FALSE, as.xml = FALSE) {
+getLegislationSigned <- function(biennium, agency = c("House", "Senate"), paired = FALSE, as.xml = FALSE) {
   if(!all(grepl(biennium_pattern, biennium))) {
     stop("Biennium formatted incorrectly. Use ?getLegislationSigned for more information")
   } else if(!all(as.numeric(substr(biennium,1,4)) >= 1991)) {
