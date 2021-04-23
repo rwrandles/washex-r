@@ -2,9 +2,21 @@
 % Please edit documentation in R/getRollCalls.R
 \name{getRollCalls}
 \alias{getRollCalls}
+\alias{getRollCalls.xml}
+\alias{getRollCalls.summary}
+\alias{getRollCalls.votes}
 \title{Get roll call votes}
 \usage{
-getRollCalls(biennium, billNumber)
+getRollCalls.xml(biennium, billNumber, paired = TRUE)
+
+getRollCalls.summary(
+  biennium,
+  billNumber,
+  paired = TRUE,
+  type = c("df", "list")
+)
+
+getRollCalls.votes(biennium, billNumber, paired = TRUE, type = c("df", "list"))
 }
 \arguments{
 \item{biennium}{Character vector representing the biennium(s) to be
@@ -12,6 +24,13 @@ searched. Each argument should take the form "XXXX-YY"}
 
 \item{billNumber}{Character or numeric vector containing the bill number(s)
 to be retrieved.}
+
+\item{paired}{If TRUE, will assume that equal length vectors represent
+paired data. Set to FALSE to generate an NxN grid of input
+arguments. Applies to equal length vector inputs only.}
+
+\item{type}{One of "df", "list", or "xml". Specifies the format for
+the output.}
 }
 \value{
 Currently, returns an XML array containing all roll call votes.

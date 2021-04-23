@@ -10,61 +10,75 @@
 #'
 #' @examples
 #' getSponsors("2007-08")
-getSponsors <- function(biennium, as.xml = FALSE) {
+getSponsors <- function(biennium, type = c("df", "list", "xml")) {
+  type <- rlang::arg_match(type)
+
   if(!all(grepl(biennium_pattern, biennium))) {
     stop("Biennium formatted incorrectly. Use ?getSponsors for more information")
   } else if(!all(as.numeric(substr(biennium,1,4)) >= 1991)) {
     stop("Biennium out of range. Information is available going back to 1991-92")
   }
 
-  path <- paste(prefix,
-                "sponsorservice.asmx/GetSponsors?biennium=",
-                biennium[1], sep = "")
+  if(type == "df") {
+    out <- data.frame()
 
-  tbl <- tryCatch(XML::xmlParse(path),
-                  error = function(e){
-                    e$message <- errMessage
-                    stop(e)
-                  })
-
-  if(as.xml) {
-    out <- tbl
-  } else {
-    out <- tibble::as_tibble(XML::xmlToDataFrame(tbl,
-                                                 stringsAsFactors = FALSE))
-    out$Biennium <- biennium[1]
-  }
-
-  if(length(biennium) > 1) {
-    for(i in 2:length(biennium)) {
+    for(year in biennium) {
       path <- paste(prefix,
                     "sponsorservice.asmx/GetSponsors?biennium=",
-                    biennium[i], sep = "")
-
+                    year, sep = "")
       tbl <- tryCatch(XML::xmlParse(path),
                       error = function(e){
                         e$message <- errMessage
                         stop(e)
                       })
 
-      if(as.xml) {
-        out <- c(out,tbl)
-      } else {
-        tbl <- tibble::as_tibble(XML::xmlToDataFrame(tbl,
-                                                     stringsAsFactors = FALSE))
-        tbl$Biennium <- biennium[i]
-
+      tbl <- XML::xmlToDataFrame(tbl,
+                                 stringsAsFactors = FALSE)
+      if(nrow(tbl) > 0) {
+        tbl$Biennium <- year
+        tbl <- tbl[c("Biennium",
+                   setdiff(names(tbl), "Biennium"))]
         out <- rbind(out, tbl)
       }
     }
-  }
+  } else if(type == "list") {
+    out <- list()
 
-  if(as.xml & length(biennium) > 1) {
+    for(year in biennium) {
+      path <- paste(prefix,
+                    "sponsorservice.asmx/GetSponsors?biennium=",
+                    year, sep = "")
+      tbl <- tryCatch(XML::xmlParse(path),
+                      error = function(e){
+                        e$message <- errMessage
+                        stop(e)
+                      })
+
+      tbl <- XML::xmlToList(tbl)
+      list <- list(tbl)
+      names(list) <- year
+      if(length(tbl) > 0) {
+        out <- c(out, list)
+      }
+    }
+  } else if(type == "xml") {
+    out <- c()
+
+    for(year in biennium) {
+      path <- paste(prefix,
+                    "sponsorservice.asmx/GetSponsors?biennium=",
+                    year, sep = "")
+      tbl <- tryCatch(XML::xmlParse(path),
+                      error = function(e){
+                        e$message <- errMessage
+                        stop(e)
+                      })
+
+      tbl <- XML::xmlParse(tbl)
+
+      out <- c(out, tbl)
+    }
     names(out) <- biennium
-  }
-  if(!as.xml) {
-    out <- out[c("Biennium",
-                 setdiff(names(out),c("Biennium")))]
   }
   return(out)
 }

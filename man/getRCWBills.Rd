@@ -4,7 +4,7 @@
 \alias{getRCWBills}
 \title{Search for bills based on Revised Code (RCW) citations}
 \usage{
-getRCWBills(biennium, rcwCite, paired = FALSE, as.xml = FALSE)
+getRCWBills(biennium, rcwCite, paired = FALSE, type = c("df", "list", "xml"))
 }
 \arguments{
 \item{biennium}{Character vector representing the biennium(s) to be
@@ -19,8 +19,8 @@ are allowed. For more information, see
 paired data. Set to FALSE to generate an NxN grid of input
 arguments. Applies to equal length vector inputs only.}
 
-\item{as.xml}{If TRUE, returns data in XML format. Otherwise parses data
-into dataframe format.}
+\item{type}{One of "df", "list", or "xml". Specifies the format for
+the output.}
 }
 \value{
 default, returns a dataframe. If \code{as.xml = TRUE}, then

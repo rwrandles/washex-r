@@ -4,7 +4,7 @@
 \alias{getAffectedRCW}
 \title{Link bills to Revised Code of Washington (RCW)}
 \usage{
-getAffectedRCW(biennium, billId, paired = TRUE, as.xml = FALSE)
+getAffectedRCW(biennium, billId, paired = TRUE, type = c("df", "list", "xml"))
 }
 \arguments{
 \item{biennium}{Character vector representing the biennium(s) to be
@@ -18,8 +18,8 @@ is the prefix (HB, SB, etc.) and YYYY is the bill number.}
 paired data. Set to FALSE to generate an NxN grid of input
 arguments. Applies to equal length vector inputs only.}
 
-\item{as.xml}{If TRUE, returns data in XML format. Otherwise parses data
-into dataframe format.}
+\item{type}{One of "df", "list", or "xml". Specifies the format for
+the output.}
 }
 \value{
 By default, returns a dataframe. If \code{as.xml = TRUE}, then

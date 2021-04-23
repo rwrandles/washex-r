@@ -4,14 +4,14 @@
 \alias{getSponsors}
 \title{Get legislators}
 \usage{
-getSponsors(biennium, as.xml = FALSE)
+getSponsors(biennium, type = c("df", "list", "xml"))
 }
 \arguments{
 \item{biennium}{Character vector representing the biennium(s) to be
 searched. Each argument should take the form "XXXX-YY"}
 
-\item{as.xml}{If TRUE, returns data in XML format. Otherwise parses data
-into dataframe format.}
+\item{type}{One of "df", "list", or "xml". Specifies the format for
+the output.}
 }
 \value{
 By default, returns a dataframe. If \code{as.xml = TRUE}, then

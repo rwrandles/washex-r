@@ -4,14 +4,14 @@
 \alias{getLegislationByYear}
 \title{Get legislation by year}
 \usage{
-getLegislationByYear(year, as.xml = FALSE)
+getLegislationByYear(year, type = c("df", "list", "xml"))
 }
 \arguments{
 \item{year}{Character or numeric vector representing the year(s) to be
 searched.}
 
-\item{as.xml}{If TRUE, returns data in XML format. Otherwise parses data
-into dataframe format.}
+\item{type}{One of "df", "list", or "xml". Specifies the format for
+the output.}
 }
 \value{
 By default, returns a dataframe. If \code{as.xml = TRUE}, then

@@ -18,7 +18,9 @@
 #' bills <- c(1447,1219,1001,2680)
 #'
 #' getAmendments(years, bills, paired = TRUE, as.xml = FALSE)
-getAmendments <- function(biennium, billNumber, paired = TRUE, as.xml = FALSE) {
+getAmendments <- function(biennium, billNumber, paired = TRUE, type = c("df", "list", "xml")) {
+  type <- rlang::arg_match(type)
+
   if(!all(grepl(biennium_pattern, biennium))) {
     stop("Biennium formatted incorrectly. Use ?getAmendments for more information")
   } else if(!all(as.numeric(substr(biennium,1,4)) >= 1991)) {
@@ -33,28 +35,10 @@ getAmendments <- function(biennium, billNumber, paired = TRUE, as.xml = FALSE) {
     request <- expand.grid(biennium, billNumber, KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)
   }
 
-  path <- paste(prefix,
-                "legislationservice.asmx/GetAmendmentsForBiennium?biennium=",
-                request[1,1], "&billNumber=", request[1,2], sep = "")
+  if(type == "df") {
+    out <- data.frame()
 
-  tbl <- tryCatch(XML::xmlParse(path),
-                  error = function(e){
-                    e$message <- errMessage
-                    stop(e)
-                  })
-
-  if(as.xml) {
-    out <- tbl
-  } else {
-    out <- tibble::as_tibble(XML::xmlToDataFrame(tbl,
-                                                 stringsAsFactors = FALSE))
-    out$Biennium <- request[1,1]
-    out$BillNumber <- request[1,2]
-    out <- out[c(setdiff(names(out),"Agency"))]
-  }
-
-  if(nrow(request) > 1) {
-    for(bill in 2:nrow(request)) {
+    for(bill in 1:nrow(request)) {
       path <- paste(prefix,
                     "legislationservice.asmx/GetAmendmentsForBiennium?biennium=",
                     request[bill,1], "&billNumber=", request[bill,2], sep = "")
@@ -65,27 +49,54 @@ getAmendments <- function(biennium, billNumber, paired = TRUE, as.xml = FALSE) {
                         stop(e)
                       })
 
-      if(as.xml) {
-        out <- c(out,tbl)
-      } else {
-        tbl <- tibble::as_tibble(XML::xmlToDataFrame(tbl,
-                                                     stringsAsFactors = FALSE))
+      tbl <- XML::xmlToDataFrame(tbl,
+                                 stringsAsFactors = FALSE)
+      if(nrow(tbl) > 0) {
         tbl$Biennium <- request[bill,1]
         tbl$BillNumber <- request[bill,2]
-
-        tbl <- tbl[c(setdiff(names(tbl),"Agency"))]
-
-        out <- rbind(out, tbl)
+        tbl <- tbl[c("Biennium", "BillNumber",
+                     setdiff(names(tbl),c("Biennium", "BillNumber")))]
+        out <- dplyr::bind_rows(out, tbl)
       }
     }
-  }
+  } else if(type == "list") {
+    out <- list()
 
-  if(as.xml & nrow(request) > 1) {
+    for(bill in 1:nrow(request)) {
+      path <- paste(prefix,
+                    "legislationservice.asmx/GetAmendmentsForBiennium?biennium=",
+                    request[bill,1], "&billNumber=", request[bill,2], sep = "")
+
+      tbl <- tryCatch(XML::xmlParse(path),
+                      error = function(e){
+                        e$message <- errMessage
+                        stop(e)
+                      })
+
+      tbl <- XML::xmlToList(tbl)
+      list <- list(tbl)
+      names(list) <- request[bill,2]
+      if(length(tbl) > 0) {
+        out <- c(out, list)
+      }
+    }
+  } else if(type == "xml") {
+    out <- c()
+
+    for(bill in 1:nrow(request)) {
+      path <- paste(prefix,
+                    "legislationservice.asmx/GetAmendmentsForBiennium?biennium=",
+                    request[bill,1], "&billNumber=", request[bill,2], sep = "")
+
+      tbl <- tryCatch(XML::xmlParse(path),
+                      error = function(e){
+                        e$message <- errMessage
+                        stop(e)
+                      })
+
+      out <- c(out,tbl)
+    }
     names(out) <- paste(request[,1],request[,2],sep="//")
-  }
-  if(!as.xml) {
-    out <- out[c("Biennium","BillNumber",
-                 setdiff(names(out),c("Biennium","BillNumber")))]
   }
   return(out)
 }

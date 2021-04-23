@@ -8,7 +8,7 @@ getLegislationSigned(
   biennium,
   agency = c("House", "Senate"),
   paired = FALSE,
-  as.xml = FALSE
+  type = c("df", "list", "xml")
 )
 }
 \arguments{
@@ -22,8 +22,8 @@ elements.}
 paired data. Set to FALSE to generate an NxN grid of input
 arguments. Applies to equal length vector inputs only.}
 
-\item{as.xml}{If TRUE, returns data in XML format. Otherwise parses data
-into dataframe format.}
+\item{type}{One of "df", "list", or "xml". Specifies the format for
+the output.}
 }
 \value{
 By default, returns a dataframe. If \code{as.xml = TRUE}, then

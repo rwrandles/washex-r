@@ -4,7 +4,12 @@
 \alias{getCurrentStatus}
 \title{Get bill status}
 \usage{
-getCurrentStatus(biennium, billNumber, paired = TRUE, as.xml = FALSE)
+getCurrentStatus(
+  biennium,
+  billNumber,
+  paired = TRUE,
+  type = c("df", "list", "xml")
+)
 }
 \arguments{
 \item{biennium}{Character vector representing the biennium(s) to be
@@ -17,8 +22,8 @@ to be retrieved.}
 paired data. Set to FALSE to generate an NxN grid of input
 arguments. Applies to equal length vector inputs only.}
 
-\item{as.xml}{If TRUE, returns data in XML format. Otherwise parses data
-into dataframe format.}
+\item{type}{One of "df", "list", or "xml". Specifies the format for
+the output.}
 }
 \value{
 By default, returns a dataframe. If \code{as.xml = TRUE}, then

@@ -4,7 +4,7 @@
 \alias{getBillSponsors}
 \title{Get sponsor information for a bill}
 \usage{
-getBillSponsors(biennium, billId, as.xml = FALSE)
+getBillSponsors(biennium, billId, paired = TRUE, type = c("df", "list", "xml"))
 }
 \arguments{
 \item{biennium}{Character vector representing the biennium(s) to be
@@ -14,8 +14,12 @@ searched. Each argument should take the form "XXXX-YY"}
 Each argument should take the form "XX YYYY", where XX
 is the prefix (HB, SB, etc.) and YYYY is the bill number.}
 
-\item{as.xml}{If TRUE, returns data in XML format. Otherwise parses data
-into dataframe format.}
+\item{paired}{If TRUE, will assume that equal length vectors represent
+paired data. Set to FALSE to generate an NxN grid of input
+arguments. Applies to equal length vector inputs only.}
+
+\item{type}{One of "df", "list", or "xml". Specifies the format for
+the output.}
 }
 \value{
 By default, returns a dataframe. If \code{as.xml = TRUE}, then

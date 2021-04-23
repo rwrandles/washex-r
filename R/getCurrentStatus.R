@@ -19,7 +19,9 @@
 #' This function returns the bill's status as of today. If a bill
 #'     was never passed, it lists the most recent status. To
 #'     get a bill's complete history, use \code{\link{getStatusChanges}}
-getCurrentStatus <- function(biennium, billNumber, paired = TRUE, as.xml = FALSE) {
+getCurrentStatus <- function(biennium, billNumber, paired = TRUE, type = c("df", "list", "xml")) {
+  type <- rlang::arg_match(type)
+
   if(!all(grepl(biennium_pattern, biennium))) {
     stop("Biennium formatted incorrectly. Use ?getCurrentStatus for more information")
   } else if(!all(as.numeric(substr(biennium,1,4)) >= 1991)) {
@@ -34,28 +36,10 @@ getCurrentStatus <- function(biennium, billNumber, paired = TRUE, as.xml = FALSE
     request <- expand.grid(biennium, billNumber, KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)
   }
 
-  path <- paste(prefix, "legislationservice.asmx/GetCurrentStatus?biennium=",
-                gsub(" ", "%20", request[1,1]), "&billNumber=",
-                gsub(" ", "%20", request[1,2]), sep = "")
+  if(type == "df") {
+    out <- data.frame()
 
-  tbl <- tryCatch(XML::xmlParse(path),
-                  error = function(e){
-                    e$message <- errMessage
-                    stop(e)
-                  })
-
-  if(as.xml) {
-    out <- tbl
-  } else {
-    tbl <- XML::xmlToList(tbl)
-    out <- data.frame(t(matrix(unlist(tbl),dimnames=list(names(tbl)))))
-
-    out$Biennium <- request[1,1]
-    out$BillNumber <- request[1,2]
-  }
-
-  if(nrow(request) > 1) {
-    for(bill in 2:nrow(request)) {
+    for(bill in 1:nrow(request)) {
       path <- paste(prefix, "legislationservice.asmx/GetCurrentStatus?biennium=",
                     gsub(" ", "%20", request[bill,1]), "&billNumber=",
                     gsub(" ", "%20", request[bill,2]), sep = "")
@@ -66,26 +50,59 @@ getCurrentStatus <- function(biennium, billNumber, paired = TRUE, as.xml = FALSE
                         stop(e)
                       })
 
-      if(as.xml) {
-        out <- c(out,tbl)
-      } else {
-        tbl <- XML::xmlToList(tbl)
-        tbl <- data.frame(t(matrix(unlist(tbl),dimnames=list(names(tbl)))))
+      tbl <- XML::xmlToList(tbl)
+      df <- data.frame(t(matrix(unlist(tbl))),
+                         stringsAsFactors = FALSE)
 
-        tbl$Biennium <- request[bill,1]
-        tbl$BillNumber <- request[bill,2]
+      colnames(df) <- names(tbl)
+      rownames(df) <- ""
 
-        out <- rbind(out,tbl)
+      if(nrow(df) > 0) {
+        df$Biennium <- request[bill,1]
+        df$BillNumber <- request[bill,2]
+        df <- df[c("Biennium", "BillNumber",
+                     setdiff(names(df), c("Biennium", "BillNumber")))]
+        out <- rbind(out, df)
       }
     }
-  }
+  } else if(type == "list") {
+    out <- list()
 
-  if(as.xml & nrow(request) > 1) {
-    names(out) <- paste(request[,1],request[,2],sep = "//")
-  }
-  if(!as.xml) {
-    out <- out[c("Biennium","BillNumber",
-                 setdiff(names(out),c("Biennium","BillNumber")))]
+    for(bill in 1:nrow(request)) {
+      path <- paste(prefix, "legislationservice.asmx/GetCurrentStatus?biennium=",
+                    gsub(" ", "%20", request[bill,1]), "&billNumber=",
+                    gsub(" ", "%20", request[bill,2]), sep = "")
+
+      tbl <- tryCatch(XML::xmlParse(path),
+                      error = function(e){
+                        e$message <- errMessage
+                        stop(e)
+                      })
+
+      tbl <- XML::xmlToList(tbl)
+      list <- list(tbl)
+      names(list) <- request[bill,2]
+      if(length(tbl) > 0) {
+        out <- c(out, tbl)
+      }
+    }
+  } else if(type == "xml") {
+    out <- c()
+
+    for(bill in 1:nrow(request)) {
+      path <- paste(prefix, "legislationservice.asmx/GetCurrentStatus?biennium=",
+                    gsub(" ", "%20", request[bill,1]), "&billNumber=",
+                    gsub(" ", "%20", request[bill,2]), sep = "")
+
+      tbl <- tryCatch(XML::xmlParse(path),
+                      error = function(e){
+                        e$message <- errMessage
+                        stop(e)
+                      })
+
+      out <- c(out, tbl)
+    }
+    names(out) <- paste(request[,1], request[,2], sep = "//")
   }
   return(out)
 }

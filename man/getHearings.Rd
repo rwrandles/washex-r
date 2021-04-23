@@ -4,7 +4,7 @@
 \alias{getHearings}
 \title{Get hearings regarding a bill}
 \usage{
-getHearings(biennium, billNumber, paired = TRUE, as.xml = FALSE)
+getHearings(biennium, billNumber, paired = TRUE, type = c("df", "list", "xml"))
 }
 \arguments{
 \item{biennium}{Character vector representing the biennium(s) to be
@@ -17,23 +17,22 @@ to be retrieved.}
 paired data. Set to FALSE to generate an NxN grid of input
 arguments. Applies to equal length vector inputs only.}
 
-\item{as.xml}{If TRUE, returns data in XML format. Otherwise parses data
-into dataframe format.}
+\item{type}{One of "df", "list", or "xml". Specifies the format for
+the output.}
 }
 \value{
 By default, returns a list of hearings. If \code{as.xml = TRUE}, then
 returns the raw XML
 }
 \description{
-Get a list of dates, locations, and descriptions, of all
+Get a list of dates, locations, and descriptions of all
 committee hearings on a particular bill
 }
 \section{Note}{
- The resulting XML documents contain multiple
-nested lists. As such, it is not currently compatible with the XML
-package's conversion to the dataframe format. Future revisions
-may be made in order to help with the cleaning process and potentially
-allow for better compatibility with dataframes.
+ Due to the nature of the resulting XML document,
+the function trims data from excessively nested lists when
+\code{type = "df"}. In order to access the full information, use
+\code{type = "list"} instead.
 }
 
 \examples{
