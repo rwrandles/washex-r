@@ -5,8 +5,8 @@
 #'
 #' @inheritParams getLegislation
 #'
-#' @return By default, returns a list of hearings. If \code{as.xml = TRUE}, then
-#'     returns the raw XML
+#' @return \code{getHearings} returns an object of type equal to the
+#'     \code{type} argument (defaults to dataframe)
 #' @export
 #'
 #' @examples
@@ -14,7 +14,7 @@
 #' bills <- getLegislationByYear(c("2011", "2012"))
 #' billsSenate <- subset(bills, OriginalAgency == "Senate")
 #'
-#' \dontrun{getHearings(billsSenate$Biennium, billsSenate$BillNumber, paired = TRUE)}
+#' \dontrun{getHearings(billsSenate$Biennium, billsSenate$BillNumber, paired = TRUE, type = "df")}
 #'
 #' @section Note: Due to the nature of the resulting XML document,
 #'     the function trims data from excessively nested lists when
@@ -22,6 +22,7 @@
 #'     \code{type = "list"} instead.
 getHearings <- function(biennium, billNumber, paired = TRUE, type = c("df", "list", "xml")) {
   type <- rlang::arg_match(type)
+  billNumber <- as.character(billNumber)
 
   if(!all(grepl(biennium_pattern, biennium))) {
     stop("Biennium formatted incorrectly. Use ?getHearings for more information")

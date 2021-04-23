@@ -22,8 +22,8 @@ arguments. Applies to equal length vector inputs only.}
 the output.}
 }
 \value{
-By default, returns a dataframe. If \code{as.xml = TRUE}, then
-returns the raw XML
+\code{getBillSponsors} returns an object of type equal to the
+\code{type} argument (defaults to dataframe)
 }
 \description{
 Get sponsor information for a bill
@@ -32,5 +32,5 @@ Get sponsor information for a bill
 ## get the list of all sponsors on a set of bills, filtered for primary sponsorship
 
 spons <- getBillSponsors("2007-08", c("HB 1001", "HB 1002", "HB 1003"))
-spons <- subset(spons, Type == "Primary")
+sponsP <- subset(spons, Type == "Primary")
 }

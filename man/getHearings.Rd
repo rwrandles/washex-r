@@ -21,8 +21,8 @@ arguments. Applies to equal length vector inputs only.}
 the output.}
 }
 \value{
-By default, returns a list of hearings. If \code{as.xml = TRUE}, then
-returns the raw XML
+\code{getHearings} returns an object of type equal to the
+\code{type} argument (defaults to dataframe)
 }
 \description{
 Get a list of dates, locations, and descriptions of all
@@ -40,6 +40,6 @@ the function trims data from excessively nested lists when
 bills <- getLegislationByYear(c("2011", "2012"))
 billsSenate <- subset(bills, OriginalAgency == "Senate")
 
-\dontrun{getHearings(billsSenate$Biennium, billsSenate$BillNumber, paired = TRUE)}
+\dontrun{getHearings(billsSenate$Biennium, billsSenate$BillNumber, paired = TRUE, type = "df")}
 
 }

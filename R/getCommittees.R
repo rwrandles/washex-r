@@ -5,8 +5,8 @@
 #'
 #' @inheritParams getSponsors
 #'
-#' @return By default, returns a dataframe. If \code{as.xml = TRUE}, then
-#'     returns the raw XML
+#' @return \code{getCommittees} returns an object of type equal to the
+#'     \code{type} argument (defaults to dataframe)
 #' @export
 #'
 #' @examples

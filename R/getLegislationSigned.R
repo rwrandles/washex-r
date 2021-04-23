@@ -5,8 +5,8 @@
 #'
 #' @inheritParams getCommitteeMembers
 #'
-#' @return By default, returns a dataframe. If \code{as.xml = TRUE}, then
-#'     returns the raw XML
+#' @return \code{getLegislationSigned} returns an object of type equal to the
+#'     \code{type} argument (defaults to dataframe)
 #' @export
 #'
 #' @examples
@@ -84,7 +84,7 @@ getLegislationSigned <- function(biennium, agency = c("House", "Senate"), paired
   } else if(type == "xml") {
     out <- c()
 
-    for(bill in 1:nrow(reqeust)) {
+    for(bill in 1:nrow(request)) {
       path <- paste(prefix,
                     "legislationservice.asmx/GetLegislationGovernorSigned?biennium=",
                     request[bill,1], "&agency=", request[bill,2], sep = "")

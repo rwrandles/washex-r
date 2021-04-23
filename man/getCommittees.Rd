@@ -14,8 +14,8 @@ searched. Each argument should take the form "XXXX-YY"}
 the output.}
 }
 \value{
-By default, returns a dataframe. If \code{as.xml = TRUE}, then
-returns the raw XML
+\code{getCommittees} returns an object of type equal to the
+\code{type} argument (defaults to dataframe)
 }
 \description{
 Get a list of all committees that were active during the biennium,

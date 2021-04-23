@@ -6,14 +6,15 @@
 #' @param year Character or numeric vector representing the year(s) to be
 #'      searched.
 #'
-#' @return By default, returns a dataframe. If \code{as.xml = TRUE}, then
-#'     returns the raw XML
+#' @return \code{getLegislationByYear} returns an object of type equal to the
+#'     \code{type} argument (defaults to dataframe)
 #' @export
 #'
 #' @examples
 #' getLegislationByYear("2007")
 getLegislationByYear <- function(year, type = c("df", "list", "xml")) {
   type <- rlang::arg_match(type)
+  year <- as.character(year)
 
   if(!all(grepl(year_pattern, year))) {
     stop("Year formatted incorrectly. Use ?getLegislationByYear for more information")

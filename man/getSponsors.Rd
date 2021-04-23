@@ -14,8 +14,8 @@ searched. Each argument should take the form "XXXX-YY"}
 the output.}
 }
 \value{
-By default, returns a dataframe. If \code{as.xml = TRUE}, then
-returns the raw XML
+\code{getSponsors} returns an object of type equal to the
+\code{type} argument (defaults to dataframe)
 }
 \description{
 Get a list of all sponsors (all congressmembers) for a given biennium

@@ -5,14 +5,15 @@
 #'
 #' @inheritParams getLegislation
 #'
-#' @return By default, returns a dataframe. If \code{as.xml = TRUE}, then
-#'     returns the raw XML
+#' @return \code{getStatusChanges} returns an object of type equal to the
+#'     \code{type} argument (defaults to dataframe)
 #' @export
 #'
 #' @examples
-#' getStatusChanges("2007-08", "1001", as.xml = FALSE)
+#' getStatusChanges("2007-08", "1001", type = "list")
 getStatusChanges <- function(biennium, billNumber, paired = TRUE, type = c("df", "list", "xml")) {
   type <- rlang::arg_match(type)
+  billNumber <- as.character(billNumber)
 
   if(!all(grepl(biennium_pattern, biennium))) {
     stop("Biennium formatted incorrectly. Use ?getStatusChanges for more information")

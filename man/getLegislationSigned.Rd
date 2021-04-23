@@ -26,8 +26,8 @@ arguments. Applies to equal length vector inputs only.}
 the output.}
 }
 \value{
-By default, returns a dataframe. If \code{as.xml = TRUE}, then
-returns the raw XML
+\code{getLegislationSigned} returns an object of type equal to the
+\code{type} argument (defaults to dataframe)
 }
 \description{
 Get a dataframe containing all of the bills that originated in a

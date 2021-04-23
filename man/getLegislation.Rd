@@ -26,8 +26,8 @@ arguments. Applies to equal length vector inputs only.}
 the output.}
 }
 \value{
-By default, returns a dataframe. If \code{as.xml = TRUE}, then
-returns the raw XML
+\code{getLegislation} returns an object of type equal to the
+\code{type} argument (defaults to dataframe)
 }
 \description{
 Get legislative summary information for a particular bill,
@@ -37,5 +37,6 @@ description
 \examples{
 getLegislation("2007-08", "1001")
 
-\dontrun{getLegislation("2007-08", 1001:1100, as.xml = TRUE)}
+## get XML data for the first 100 hundred bills of the 2007-08 session
+\dontrun{getLegislation("2007-08", 1001:1100, type = "xml")}
 }

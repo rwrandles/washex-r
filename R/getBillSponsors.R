@@ -5,15 +5,15 @@
 #'      Each argument should take the form "XX YYYY", where XX
 #'      is the prefix (HB, SB, etc.) and YYYY is the bill number.
 #'
-#' @return By default, returns a dataframe. If \code{as.xml = TRUE}, then
-#'     returns the raw XML
+#' @return \code{getBillSponsors} returns an object of type equal to the
+#'     \code{type} argument (defaults to dataframe)
 #' @export
 #'
 #' @examples
 #' ## get the list of all sponsors on a set of bills, filtered for primary sponsorship
 #'
 #' spons <- getBillSponsors("2007-08", c("HB 1001", "HB 1002", "HB 1003"))
-#' spons <- subset(spons, Type == "Primary")
+#' sponsP <- subset(spons, Type == "Primary")
 getBillSponsors <- function(biennium, billId, paired = TRUE, type = c("df", "list", "xml")) {
   type <- rlang::arg_match(type)
 
@@ -49,7 +49,7 @@ getBillSponsors <- function(biennium, billId, paired = TRUE, type = c("df", "lis
                                  stringsAsFactors = FALSE)
       if(nrow(tbl) > 0) {
         tbl$Biennium <- request[bill,1]
-        tbl$BillId <- request[bill,1]
+        tbl$BillId <- request[bill,2]
         tbl <- tbl[c("Biennium", "BillId",
                  setdiff(names(tbl),c("Biennium","BillId")))]
         out <- rbind(out, tbl)

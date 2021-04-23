@@ -4,8 +4,8 @@
 #'
 #' @inheritParams getLegislation
 #'
-#' @return By default, returns a dataframe. If \code{as.xml = TRUE}, then
-#'     returns the raw XML
+#' @return \code{getCurrentStatus} returns an object of type equal to the
+#'     \code{type} argument (defaults to dataframe)
 #' @export
 #'
 #' @examples
@@ -21,6 +21,7 @@
 #'     get a bill's complete history, use \code{\link{getStatusChanges}}
 getCurrentStatus <- function(biennium, billNumber, paired = TRUE, type = c("df", "list", "xml")) {
   type <- rlang::arg_match(type)
+  billNumber <- as.character(billNumber)
 
   if(!all(grepl(biennium_pattern, biennium))) {
     stop("Biennium formatted incorrectly. Use ?getCurrentStatus for more information")

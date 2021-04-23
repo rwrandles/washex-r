@@ -9,14 +9,15 @@
 #'      are allowed. For more information, see
 #'      \url{https://apps.leg.wa.gov/rcw/}
 #'
-#' @return default, returns a dataframe. If \code{as.xml = TRUE}, then
-#'     returns the raw XML
+#' @return \code{getRCWBills} returns an object of type equal to the
+#'     \code{type} argument (defaults to dataframe)
 #' @export
 #'
 #' @examples
 #' getRCWBills("2007-08", "13.40.0357")
 getRCWBills <- function(biennium, rcwCite, paired = FALSE, type = c("df", "list", "xml")) {
   type <- rlang::arg_match(type)
+  rcwCite <- as.character(rcwCite)
 
   if(!all(grepl(biennium_pattern, biennium))) {
     stop("Biennium formatted incorrectly. Use ?getLegislation for more information")

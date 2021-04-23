@@ -6,8 +6,8 @@
 #' @param name Character vector of committee names. To get the committee names
 #'      for a particular session, see \code{\link{getCommittees}}.
 #'
-#' @return By default, returns a dataframe. If \code{as.xml = TRUE}, then
-#'     returns the raw XML
+#' @return \code{getCommitteeMembers} returns an object of type equal to the
+#'     \code{type} argument (defaults to dataframe)
 #' @export
 #'
 #' @examples

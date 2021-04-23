@@ -5,18 +5,21 @@
 #' @inheritParams getBillSponsors
 #' @inheritParams getLegislation
 #'
-#' @return By default, returns a dataframe. If \code{as.xml = TRUE}, then
-#'     returns the raw XML
+#' @return \code{getAffectedRCW} returns an object of type equal to the
+#'     \code{type} argument (defaults to dataframe)
 #'
 #' @export
 #' @examples
 #' ## usage for a single bill case, XML form
-#' getAffectedRCW("2005-06", "HB 1427", as.xml = TRUE)
+#' getAffectedRCW("2005-06", "HB 1427", type = "xml")
 #'
 #' ## generates a dataframe of affected codes from all bills in 2007-08
 #' bills <- getLegislationByYear(c("2007","2008"))
 #'
 #' \dontrun{codesAffected <- getAffectedRCW("2007-08", bills$BillId)}
+#'
+#' @section Note: for more information on RCW codes, see
+#'     \url{https://apps.leg.wa.gov/rcw/}
 getAffectedRCW <- function(biennium, billId, paired = TRUE, type = c("df", "list", "xml")) {
   type <- rlang::arg_match(type)
 

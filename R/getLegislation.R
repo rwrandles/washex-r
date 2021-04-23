@@ -14,16 +14,18 @@
 #' @param type One of "df", "list", or "xml". Specifies the format for
 #'      the output.
 #'
-#' @return By default, returns a dataframe. If \code{as.xml = TRUE}, then
-#'     returns the raw XML
+#' @return \code{getLegislation} returns an object of type equal to the
+#'     \code{type} argument (defaults to dataframe)
 #' @export
 #'
 #' @examples
 #' getLegislation("2007-08", "1001")
 #'
-#' \dontrun{getLegislation("2007-08", 1001:1100, as.xml = TRUE)}
+#' ## get XML data for the first 100 hundred bills of the 2007-08 session
+#' \dontrun{getLegislation("2007-08", 1001:1100, type = "xml")}
 getLegislation <- function(biennium, billNumber, paired = TRUE, type = c("df", "list", "xml")) {
   type <- rlang::arg_match(type)
+  billNumber <- as.character(billNumber)
 
   if(!all(grepl(biennium_pattern, biennium))) {
     stop("Biennium formatted incorrectly. Use ?getLegislation for more information")

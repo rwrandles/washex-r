@@ -22,18 +22,24 @@ arguments. Applies to equal length vector inputs only.}
 the output.}
 }
 \value{
-By default, returns a dataframe. If \code{as.xml = TRUE}, then
-returns the raw XML
+\code{getAffectedRCW} returns an object of type equal to the
+\code{type} argument (defaults to dataframe)
 }
 \description{
 Get a listing of all RCW citations affected by a given bill
 }
+\section{Note}{
+ for more information on RCW codes, see
+\url{https://apps.leg.wa.gov/rcw/}
+}
+
 \examples{
 ## usage for a single bill case, XML form
-getAffectedRCW("2005-06", "HB 1427", as.xml = TRUE)
+getAffectedRCW("2005-06", "HB 1427", type = "xml")
 
 ## generates a dataframe of affected codes from all bills in 2007-08
 bills <- getLegislationByYear(c("2007","2008"))
 
 \dontrun{codesAffected <- getAffectedRCW("2007-08", bills$BillId)}
+
 }
