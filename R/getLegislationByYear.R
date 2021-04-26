@@ -11,7 +11,7 @@
 #' @export
 #'
 #' @examples
-#' getLegislationByYear("2007")
+#' \dontrun{getLegislationByYear("2007")}
 getLegislationByYear <- function(year, type = c("df", "list", "xml")) {
   type <- rlang::arg_match(type)
   year <- as.character(year)

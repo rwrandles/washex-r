@@ -38,8 +38,8 @@ Get committee members
 }
 \examples{
 ## get all committee members for a select number of committees and years
-years <- c("2011-12","2013-14","2015-16","2017-18")
-comms <- c("Education","Judiciary","Rules")
+years <- c("2011-12","2013-14")
+comms <- c("Education","Judiciary")
 
-getCommitteeMembers(years, agency = "House", comms)
+getCommitteeMembers(years, agency = "House", comms, paired = TRUE)
 }

@@ -14,8 +14,8 @@
 #' getAmendments("2007-08", "1001")
 #'
 #' ## get amendments for a specific set of bills
-#' years <- c("2005-06","2007-08","2007-08","2009-10")
-#' bills <- c(1447,1219,1001,2680)
+#' years <- c("2005-06","2007-08","2007-08")
+#' bills <- c(1447,1219,1001)
 #'
 #' getAmendments(years, bills, paired = TRUE, type = "df")
 getAmendments <- function(biennium, billNumber, paired = TRUE, type = c("df", "list", "xml")) {

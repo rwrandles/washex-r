@@ -10,8 +10,8 @@
 #' @export
 #'
 #' @examples
-#' ## get hearings for all senate bills in 2011-12
-#' bills <- getLegislationByYear(c("2011", "2012"))
+#' ## get hearings for all senate bills in 2011
+#' bills <- getLegislationByYear("2011")
 #' billsSenate <- subset(bills, OriginalAgency == "Senate")
 #'
 #' \dontrun{getHearings(billsSenate$Biennium, billsSenate$BillNumber, paired = TRUE, type = "df")}

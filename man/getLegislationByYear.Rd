@@ -21,5 +21,5 @@ the output.}
 Get a list of all bills introduced during the year
 }
 \examples{
-getLegislationByYear("2007")
+\dontrun{getLegislationByYear("2007")}
 }

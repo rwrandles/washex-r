@@ -13,10 +13,10 @@
 #' ## usage for a single bill case, XML form
 #' getAffectedRCW("2005-06", "HB 1427", type = "xml")
 #'
-#' ## generates a dataframe of affected codes from all bills in 2007-08
-#' bills <- getLegislationByYear(c("2007","2008"))
-#'
-#' \dontrun{codesAffected <- getAffectedRCW("2007-08", bills$BillId)}
+#' ## generates a dataframe of affected codes from all bills in 2007
+#' \dontrun{
+#' bills <- getLegislationByYear("2007")
+#' codesAffected <- getAffectedRCW("2007-08", bills$BillId)}
 #'
 #' @section Note: for more information on RCW codes, see
 #'     \url{https://apps.leg.wa.gov/rcw/}

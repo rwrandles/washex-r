@@ -10,9 +10,9 @@
 #' @export
 #'
 #' @examples
-#' ## get all bills signed into law between 2007-2012
-#' bienniums <- c("2007-08", "2009-10", "2011-12")
-#' getLegislationSigned(bienniums, c("House", "Senate"))
+#' ## get all bills signed into law from the Senate between 2007-2010
+#' bienniums <- c("2007-08", "2009-10")
+#' getLegislationSigned(bienniums, "Senate")
 getLegislationSigned <- function(biennium, agency = c("House", "Senate"), paired = FALSE, type = c("df", "list", "xml")) {
   type <- rlang::arg_match(type)
 
