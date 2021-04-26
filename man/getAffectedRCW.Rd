@@ -13,6 +13,9 @@ getAffectedRCW(biennium, billId, paired = TRUE, as.xml = FALSE)
 "XX YYYY", where XX is the prefix (HB, SB, etc.) and YYYY is the
 bill number}
 
+\item{paired}{when TRUE, assumes that equal length vectors represent paired data and
+will be treated as such. Set to FALSE to generate an NxN grid of input arguments}
+
 \item{as.xml}{set to TRUE for raw XML (defaults to FALSE)}
 }
 \value{

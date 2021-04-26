@@ -20,8 +20,8 @@ getStatusChanges <- function(biennium, billNumber, paired = TRUE, as.xml = FALSE
     stop("Bill Number formatted incorrectly. Use ?getStatusChanges for more information")
   }
 
-  if(length(biennium) == length & paired) {
-    request <- data.frame(biennium = biennium, billId = billNumber)
+  if(length(biennium) == length(billNumber) & paired) {
+    request <- data.frame(biennium = biennium, billNum = billNumber)
   } else {
     request <- expand.grid(biennium, billNumber, KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)
   }

@@ -4,7 +4,7 @@
 \alias{getBillSponsors}
 \title{Get sponsor information for a bill}
 \usage{
-getBillSponsors(biennium, billId, as.xml = FALSE)
+getBillSponsors(biennium, billId, paired = TRUE, as.xml = FALSE)
 }
 \arguments{
 \item{biennium}{either a string or character vector of the form "XXXX-YY"}
@@ -12,6 +12,9 @@ getBillSponsors(biennium, billId, as.xml = FALSE)
 \item{billId}{a string or vector of character strings of the format
 "XX YYYY", where XX is the prefix (HB, SB, etc.) and YYYY is the
 bill number}
+
+\item{paired}{when TRUE, assumes that equal length vectors represent paired data and
+will be treated as such. Set to FALSE to generate an NxN grid of input arguments}
 
 \item{as.xml}{set to TRUE for raw XML (defaults to FALSE)}
 }

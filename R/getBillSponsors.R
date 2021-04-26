@@ -14,7 +14,7 @@
 #'
 #' spons <- getBillSponsors("2007-08", c("HB 1001", "HB 1002", "HB 1003"))
 #' spons <- subset(spons, Type == "Primary")
-getBillSponsors <- function(biennium, billId, as.xml = FALSE) {
+getBillSponsors <- function(biennium, billId, paired = TRUE, as.xml = FALSE) {
   if(!all(grepl(biennium_pattern, biennium))) {
     stop("Biennium formatted incorrectly. Use ?getBillSponsors for more information")
   } else if(!all(as.numeric(substr(biennium,1,4)) >= 1991)) {
@@ -23,7 +23,7 @@ getBillSponsors <- function(biennium, billId, as.xml = FALSE) {
     stop("Bill ID formatted incorrectly. Use ?getBillSponsors for more information")
   }
 
-  if(length(biennium) == length(billId)) {
+  if(length(biennium) == length(billId) & paired) {
     request <- data.frame(biennium = biennium, billId = billId)
   } else {
     request <- expand.grid(biennium, billId, KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)
