@@ -1,7 +1,10 @@
 ## Test environments
 * local OS X install, R 4.0.2
 * ubuntu 16.04.6 (on travis-ci), R 4.0.2
-* local Windows 10 (devel and release)
+* solaris 10 (on Rhub), patched
+* debian (on Rhub), patched
+* local Windows 10, patched
+* win_builder, devel
 
 ## R CMD check results
 There were no ERRORs or WARNINGs
@@ -9,9 +12,10 @@ There were no ERRORs or WARNINGs
 There are 2 NOTEs:
 
 * checking CRAN incoming feasibility ... NOTE
-  Maintainer: 'Rohnin Randles <rrandles@princeton.edu>'
-  
+  Maintainer: 'Rohnin Randles <rrandles@princeton.edu>' 
   New submission
+  
+  This is the initial submission for this package.
 
 * checking examples ... NOTE
   Examples with CPU (user + system) or elapsed time > 5s
