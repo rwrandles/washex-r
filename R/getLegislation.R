@@ -62,6 +62,7 @@ getLegislation <- function(biennium, billNumber, paired = TRUE, type = c("df", "
         tbl <- tbl[c("Biennium", "BillNumber",
                      setdiff(names(tbl), c("Biennium", "BillNumber")))]
         out <- dplyr::bind_rows(out, tbl)
+        out <- out[!duplicated(out),]
       }
     }
   } else if(type == "list") {

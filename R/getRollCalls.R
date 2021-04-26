@@ -110,6 +110,7 @@ getRollCalls.summary <- function(biennium, billNumber, paired = TRUE, type = c("
 
         df <- dplyr::bind_rows(tbl)
         out <- dplyr::bind_rows(out, df)
+        out <- out[!duplicated(out),]
       }
     }
   } else if(type == "list") {
@@ -186,6 +187,7 @@ getRollCalls.votes <- function(biennium, billNumber, paired = TRUE, type = c("df
 
         df <- dplyr::bind_rows(tbl)
         out <- dplyr::bind_rows(out, df)
+        out <- out[!duplicated(out),]
       }
     }
   } else if(type == "list") {

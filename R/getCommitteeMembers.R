@@ -62,7 +62,8 @@ getCommitteeMembers <- function(biennium, agency = c("House", "Senate"), name, p
         tbl$CommitteeName <- request[bill,3]
         tbl <- tbl[c("Biennium", "Agency", "CommitteeName",
                      setdiff(names(tbl), c("Biennium", "Agency", "CommitteeName")))]
-        out <- rbind(out, tbl)
+        out <- dplyr::bind_rows(out, tbl)
+        out <- out[!duplicated(out),]
       }
     }
   } else if(type == "list") {

@@ -62,6 +62,7 @@ getHearings <- function(biennium, billNumber, paired = TRUE, type = c("df", "lis
 
         df <- dplyr::bind_rows(tbl)
         out <- dplyr::bind_rows(out, df)
+        out <- out[!duplicated(out),]
       }
     }
   } else if(type == "list") {

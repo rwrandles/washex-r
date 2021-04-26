@@ -58,7 +58,8 @@ getAffectedRCW <- function(biennium, billId, paired = TRUE, type = c("df", "list
         tbl$BillId <- request[bill,2]
         tbl <- tbl[c("Biennium", "BillId",
                      setdiff(names(tbl),c("Biennium","BillId")))]
-        out <- rbind(out, tbl)
+        out <- dplyr::bind_rows(out, tbl)
+        out <- out[!duplicated(out),]
       }
     }
   } else if(type == "list") {

@@ -63,7 +63,8 @@ getCurrentStatus <- function(biennium, billNumber, paired = TRUE, type = c("df",
         df$BillNumber <- request[bill,2]
         df <- df[c("Biennium", "BillNumber",
                      setdiff(names(df), c("Biennium", "BillNumber")))]
-        out <- rbind(out, df)
+        out <- dplyr::bind_rows(out, df)
+        out <- out[!duplicated(out),]
       }
     }
   } else if(type == "list") {

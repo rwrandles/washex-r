@@ -42,6 +42,7 @@ getLegislationByYear <- function(year, type = c("df", "list", "xml")) {
         tbl <- tbl[c("Year",
                      setdiff(names(tbl), "Year"))]
         out <- dplyr::bind_rows(out, tbl)
+        out <- out[!duplicated(out),]
       }
     }
   } else if(type == "list") {

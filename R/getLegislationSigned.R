@@ -58,6 +58,7 @@ getLegislationSigned <- function(biennium, agency = c("House", "Senate"), paired
         tbl <- tbl[c("Biennium", "Agency",
                      setdiff(names(tbl), c("Biennium", "Agency")))]
         out <- dplyr::bind_rows(out, tbl)
+        out <- out[!duplicated(out),]
       }
     }
   } else if(type == "list") {

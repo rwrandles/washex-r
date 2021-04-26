@@ -40,7 +40,8 @@ getCommittees <- function(biennium, type = c("df", "list", "xml")) {
         tbl$Biennium <- biennium[i]
         tbl <- tbl[c("Biennium",
                      setdiff(names(tbl),"Biennium"))]
-        out <- rbind(out, tbl)
+        out <- dplyr::bind_rows(out, tbl)
+        out <- out[!duplicated(out),]
       }
     }
   } else if(type == "list") {

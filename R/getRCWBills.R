@@ -55,6 +55,7 @@ getRCWBills <- function(biennium, rcwCite, paired = FALSE, type = c("df", "list"
         tbl <- tbl[c("Biennium", "rcwCite",
                      setdiff(names(tbl), c("Biennium", "rcwCite")))]
         out <- dplyr::bind_rows(out, tbl)
+        out <- out[!duplicated(out),]
       }
     }
   } else if(type == "list") {
