@@ -1,3 +1,9 @@
+## Resubmission
+This is a resubmission. In this version I have:
+
+* Corrected URLs in README to include protocol prefix
+* Revised examples to hit runtime targets
+
 ## Test environments
 * local OS X install, R 4.0.2
 * ubuntu 16.04.6 (on travis-ci), R 4.0.2
