@@ -24,7 +24,7 @@ getStatusChanges <- function(biennium, billNumber, paired = TRUE, type = c("df",
   }
 
   if(length(biennium) == length(billNumber) & paired) {
-    request <- data.frame(biennium = biennium, billId = billNumber)
+    request <- data.frame(biennium = biennium, billNum = billNumber)
   } else {
     request <- expand.grid(biennium, billNumber, KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)
   }
