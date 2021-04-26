@@ -70,6 +70,14 @@ sponsors_2007 %>%
 #> 10 18            1    
 #> # ... with 39 more rows
 
+head(getCommittees("2007-08")[,"Name"])
+#> [1] "Agriculture & Natural Resources"                                 
+#> [2] "Appropriations"                                                  
+#> [3] "Appropriations Subcommittee on Education"                        
+#> [4] "Appropriations Subcommittee on General Government & Audit Review"
+#> [5] "Appropriations Subcommittee on Health & Human Services"          
+#> [6] "Capital Budget"
+
 head(getStatusChanges("2007-08", "1001") %>%
   select("HistoryLine", "ActionDate"))
 #>                                                     HistoryLine
@@ -119,4 +127,4 @@ getRollCalls.votes("2007-08", ag_bills$BillNumber) %>%
 
 If you encounter any bugs or issues while using the package, please file
 an issue with a minimum reproducible example on
-[Github](https://github.com/rwrandles/washex-r/issues).
+[Github](https://github.com/rwrandles/washex-r/issues)
