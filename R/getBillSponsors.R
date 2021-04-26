@@ -1,20 +1,22 @@
 #' Get sponsor information for a bill
 #'
 #' @inheritParams getLegislation
-#' @param billId a string or vector of character strings of the format
-#'     "XX YYYY", where XX is the prefix (HB, SB, etc.) and YYYY is the
-#'     bill number
+#' @param billId Character vector containing the bill(s) to be retrieved.
+#'      Each argument should take the form "XX YYYY", where XX
+#'      is the prefix (HB, SB, etc.) and YYYY is the bill number.
 #'
-#' @return By default, returns a dataframe. If \code{as.xml = TRUE}, then
-#'     returns the raw XML
+#' @return \code{getBillSponsors} returns an object of type equal to the
+#'     \code{type} argument (defaults to dataframe)
 #' @export
 #'
 #' @examples
 #' ## get the list of all sponsors on a set of bills, filtered for primary sponsorship
 #'
 #' spons <- getBillSponsors("2007-08", c("HB 1001", "HB 1002", "HB 1003"))
-#' spons <- subset(spons, Type == "Primary")
-getBillSponsors <- function(biennium, billId, paired = TRUE, as.xml = FALSE) {
+#' sponsP <- subset(spons, Type == "Primary")
+getBillSponsors <- function(biennium, billId, paired = TRUE, type = c("df", "list", "xml")) {
+  type <- rlang::arg_match(type)
+
   if(!all(grepl(biennium_pattern, biennium))) {
     stop("Biennium formatted incorrectly. Use ?getBillSponsors for more information")
   } else if(!all(as.numeric(substr(biennium,1,4)) >= 1991)) {
@@ -29,27 +31,10 @@ getBillSponsors <- function(biennium, billId, paired = TRUE, as.xml = FALSE) {
     request <- expand.grid(biennium, billId, KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)
   }
 
-  path <- paste(prefix,
-                "legislationservice.asmx/GetSponsors?biennium=",
-                request[1,1], "&billId=", request[1,2], sep = "")
+  if(type == "df") {
+    out <- data.frame()
 
-  tbl <- tryCatch(XML::xmlParse(path),
-                  error = function(e){
-                    e$message <- errMessage
-                    stop(e)
-                  })
-
-  if(as.xml) {
-    out <- tbl
-  } else {
-    out <- tibble::as_tibble(XML::xmlToDataFrame(tbl,
-                                                 stringsAsFactors = FALSE))
-    out$Biennium <- request[1,1]
-    out$BillId <- request[1,2]
-  }
-
-  if(nrow(request) > 1) {
-    for(bill in 2:nrow(request)) {
+    for(bill in 1:nrow(request)) {
       path <- paste(prefix,
                     "legislationservice.asmx/GetSponsors?biennium=",
                     request[bill,1], "&billId=", request[bill,2], sep = "")
@@ -60,25 +45,55 @@ getBillSponsors <- function(biennium, billId, paired = TRUE, as.xml = FALSE) {
                         stop(e)
                       })
 
-      if(as.xml) {
-        out <- c(out,tbl)
-      } else {
-        tbl <- tibble::as_tibble(XML::xmlToDataFrame(tbl,
-                                                     stringsAsFactors = FALSE))
+      tbl <- XML::xmlToDataFrame(tbl,
+                                 stringsAsFactors = FALSE)
+      if(nrow(tbl) > 0) {
         tbl$Biennium <- request[bill,1]
         tbl$BillId <- request[bill,2]
-
+        tbl <- tbl[c("Biennium", "BillId",
+                 setdiff(names(tbl),c("Biennium","BillId")))]
         out <- rbind(out, tbl)
       }
     }
-  }
+  } else if(type == "list") {
+    out <- list()
 
-  if(as.xml & nrow(request) > 1) {
-    names(out) <- paste(request[,1],request[,2],sep="//")
-  }
-  if(!as.xml) {
-    out <- out[c("Biennium","BillId",
-                 setdiff(names(out),c("Biennium","BillId")))]
+    for(bill in 1:nrow(request)) {
+      path <- paste(prefix,
+                    "legislationservice.asmx/GetSponsors?biennium=",
+                    request[bill,1], "&billId=", request[bill,2], sep = "")
+
+      tbl <- tryCatch(XML::xmlParse(path),
+                      error = function(e){
+                        e$message <- errMessage
+                        stop(e)
+                      })
+
+      tbl <- XML::xmlToList(tbl)
+      list <- list(tbl)
+      names(list) <- request[bill,2]
+      if(length(tbl) > 0) {
+        out <- c(out, list)
+      }
+    }
+
+  } else if(type == "xml") {
+    out <- c()
+
+    for(bill in 1:nrow(request)) {
+      path <- paste(prefix,
+                    "legislationservice.asmx/GetSponsors?biennium=",
+                    request[bill,1], "&billId=", request[bill,2], sep = "")
+
+      tbl <- tryCatch(XML::xmlParse(path),
+                      error = function(e){
+                        e$message <- errMessage
+                        stop(e)
+                      })
+
+      out <- c(out,tbl)
+    }
+    names(out) <- paste(request[,1],request[,2],sep = "//")
   }
   return(out)
 }

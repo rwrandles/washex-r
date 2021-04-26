@@ -1,6 +1,6 @@
 Package: washex
 Title: Washington State Legislative Explorer
-Version: 0.0.0.9003
+Version: 0.0.0.9100
 Authors@R: 
     person(given = "Rohnin",
            family = "Randles",
@@ -15,8 +15,12 @@ RoxygenNote: 7.1.1
 Depends: 
     R (>= 2.10)
 Imports: 
-    XML (>= 3.99-0.5),
-    tibble
+    dplyr,
+    purrr,
+    rlang,
+    XML (>= 3.99-0.5)
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
+URL: https://github.com/rwrandles/washex-r
+BugReports: https://github.com/rwrandles/washex-r/issues

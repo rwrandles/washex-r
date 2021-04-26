@@ -4,26 +4,37 @@
 \alias{getLegislationSigned}
 \title{Get all bills signed into law}
 \usage{
-getLegislationSigned(biennium, agency, paired = FALSE, as.xml = FALSE)
+getLegislationSigned(
+  biennium,
+  agency = c("House", "Senate"),
+  paired = FALSE,
+  type = c("df", "list", "xml")
+)
 }
 \arguments{
-\item{biennium}{either a string or character vector of the form "XXXX-YY"}
+\item{biennium}{Character vector representing the biennium(s) to be
+searched. Each argument should take the form "XXXX-YY"}
 
-\item{agency}{either "House" or "Senate", or a vector of agencies}
+\item{agency}{One of "House" or "Senate", or a vector with these as its
+elements.}
 
-\item{paired}{when TRUE, assumes that equal length vectors represent paired data and
-will be treated as such. Set to FALSE to generate an NxN grid of input arguments}
+\item{paired}{If TRUE, will assume that equal length vectors represent
+paired data. Set to FALSE to generate an NxN grid of input
+arguments. Applies to equal length vector inputs only.}
 
-\item{as.xml}{set to TRUE for raw XML (defaults to FALSE)}
+\item{type}{One of "df", "list", or "xml". Specifies the format for
+the output.}
 }
 \value{
-By default, returns a dataframe. If \code{as.xml = TRUE}, then
-returns the raw XML
+\code{getLegislationSigned} returns an object of type equal to the
+\code{type} argument (defaults to dataframe)
 }
 \description{
 Get a dataframe containing all of the bills that originated in a
 given chamber and were eventually signed into law
 }
 \examples{
-getLegislationSigned("2007-08", "Senate", as.xml = TRUE)
+## get all bills signed into law between 2007-2012
+bienniums <- c("2007-08", "2009-10", "2011-12")
+getLegislationSigned(bienniums, c("House", "Senate"))
 }

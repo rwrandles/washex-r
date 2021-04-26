@@ -5,13 +5,17 @@
 #'
 #' @inheritParams getCommitteeMembers
 #'
-#' @return By default, returns a dataframe. If \code{as.xml = TRUE}, then
-#'     returns the raw XML
+#' @return \code{getLegislationSigned} returns an object of type equal to the
+#'     \code{type} argument (defaults to dataframe)
 #' @export
 #'
 #' @examples
-#' getLegislationSigned("2007-08", "Senate", as.xml = TRUE)
-getLegislationSigned <- function(biennium, agency, paired = FALSE, as.xml = FALSE) {
+#' ## get all bills signed into law between 2007-2012
+#' bienniums <- c("2007-08", "2009-10", "2011-12")
+#' getLegislationSigned(bienniums, c("House", "Senate"))
+getLegislationSigned <- function(biennium, agency = c("House", "Senate"), paired = FALSE, type = c("df", "list", "xml")) {
+  type <- rlang::arg_match(type)
+
   if(!all(grepl(biennium_pattern, biennium))) {
     stop("Biennium formatted incorrectly. Use ?getLegislationSigned for more information")
   } else if(!all(as.numeric(substr(biennium,1,4)) >= 1991)) {
@@ -31,27 +35,10 @@ getLegislationSigned <- function(biennium, agency, paired = FALSE, as.xml = FALS
     request <- expand.grid(biennium, agency, KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)
   }
 
-  path <- paste(prefix,
-                "legislationservice.asmx/GetLegislationGovernorSigned?biennium=",
-                request[1,1], "&agency=", request[1,2], sep = "")
+  if(type == "df") {
+    out <- data.frame()
 
-  tbl <- tryCatch(XML::xmlParse(path),
-                  error = function(e){
-                    e$message <- errMessage
-                    stop(e)
-                  })
-
-  if(as.xml) {
-    out <- tbl
-  } else {
-    out <- tibble::as_tibble(XML::xmlToDataFrame(tbl,
-                                                 stringsAsFactors = FALSE))
-    out$Biennium <- request[1,1]
-    out$Agency <- request[1,2]
-  }
-
-  if(nrow(request) > 1) {
-    for(bill in 2:nrow(request)) {
+    for(bill in 1:nrow(request)) {
       path <- paste(prefix,
                     "legislationservice.asmx/GetLegislationGovernorSigned?biennium=",
                     request[bill,1], "&agency=", request[bill,2], sep = "")
@@ -62,25 +49,55 @@ getLegislationSigned <- function(biennium, agency, paired = FALSE, as.xml = FALS
                         stop(e)
                       })
 
-      if(as.xml) {
-        out <- c(out,tbl)
-      } else {
-        tbl <- tibble::as_tibble(XML::xmlToDataFrame(tbl,
-                                                     stringsAsFactors = FALSE))
+      tbl <- XML::xmlToDataFrame(tbl,
+                                 stringsAsFactors = FALSE)
+
+      if(nrow(tbl) > 0) {
         tbl$Biennium <- request[bill,1]
         tbl$Agency <- request[bill,2]
-
-        out <- rbind(out, tbl)
+        tbl <- tbl[c("Biennium", "Agency",
+                     setdiff(names(tbl), c("Biennium", "Agency")))]
+        out <- dplyr::bind_rows(out, tbl)
       }
     }
-  }
+  } else if(type == "list") {
+    out <- list()
 
-  if(as.xml & nrow(request) > 1) {
-    names(out) <- paste(request[,1],request[,2],sep="//")
-  }
-  if(!as.xml) {
-    out <- out[c("Biennium","Agency",
-                 setdiff(names(out),c("Biennium", "Agency")))]
+    for(bill in 1:nrow(request)) {
+      path <- paste(prefix,
+                    "legislationservice.asmx/GetLegislationGovernorSigned?biennium=",
+                    request[bill,1], "&agency=", request[bill,2], sep = "")
+
+      tbl <- tryCatch(XML::xmlParse(path),
+                      error = function(e){
+                        e$message <- errMessage
+                        stop(e)
+                      })
+
+      tbl <- XML::xmlToList(tbl)
+      list <- list(tbl)
+      names(list) <- paste(request[bill,1], request[bill,2], sep = "_")
+      if(length(tbl) > 0) {
+        out <- c(out, list)
+      }
+    }
+  } else if(type == "xml") {
+    out <- c()
+
+    for(bill in 1:nrow(request)) {
+      path <- paste(prefix,
+                    "legislationservice.asmx/GetLegislationGovernorSigned?biennium=",
+                    request[bill,1], "&agency=", request[bill,2], sep = "")
+
+      tbl <- tryCatch(XML::xmlParse(path),
+                      error = function(e){
+                        e$message <- errMessage
+                        stop(e)
+                      })
+
+      out <- c(out, tbl)
+    }
+    names(out) <- paste(request[,1], request[,2], sep = "//")
   }
   return(out)
 }

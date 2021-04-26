@@ -2,42 +2,63 @@
 % Please edit documentation in R/getRollCalls.R
 \name{getRollCalls}
 \alias{getRollCalls}
+\alias{getRollCalls.xml}
+\alias{getRollCalls.summary}
+\alias{getRollCalls.votes}
 \title{Get roll call votes}
 \usage{
-getRollCalls(biennium, billNumber)
+getRollCalls.xml(biennium, billNumber, paired = TRUE)
+
+getRollCalls.summary(
+  biennium,
+  billNumber,
+  paired = TRUE,
+  type = c("df", "list")
+)
+
+getRollCalls.votes(biennium, billNumber, paired = TRUE, type = c("df", "list"))
 }
 \arguments{
-\item{biennium}{either a string or character vector of the form "XXXX-YY"}
+\item{biennium}{Character vector representing the biennium(s) to be
+searched. Each argument should take the form "XXXX-YY"}
 
-\item{billNumber}{an integer or character string or vector containing
-the bill numbers to retrieve}
+\item{billNumber}{Character or numeric vector containing the bill number(s)
+to be retrieved.}
+
+\item{paired}{If TRUE, will assume that equal length vectors represent
+paired data. Set to FALSE to generate an NxN grid of input
+arguments. Applies to equal length vector inputs only.}
+
+\item{type}{One of "df", "list", or "xml". Specifies the format for
+the output.}
 }
 \value{
-Currently, returns an XML array containing all roll call votes.
-For usage, see examples below
+\code{getRollCalls.xml} returns a list of XML objects for each bill.
+\code{getRollCalls.summary} and \code{getRollCalls.votes}
+return objects of type equal to the
+\code{type} argument (defaults to dataframe)
 }
 \description{
 Get an XML containing roll call information for all recorded votes
 on a bill
 }
 \section{Note}{
- This function as implemented is not in its final state.
-The resulting XML document(s) is heavily nested and
-typically requires further cleaning.
-See examples below for some potential usages. Further
-revisions will be made to help facilitate the XML parsing and
-potentially allow for compatibility with dataframes.
+ Due to the nested nature of the resulting document,
+we provide various functions to present simplified views of the data
+that are compatible with more parsimonious data structures. To see the
+full, original data, use \code{getRollCalls.xml} instead.
 }
 
 \examples{
-votes <- getRollCalls("2007-08", "1001") # get roll call votes
+votes <- getRollCalls.summary("2007-08", "1001") # get roll call votes
 
 length(votes) # total number of roll call votes recorded
+votes$CountYeas[3] # number of yea votes on roll call vote #3
 
-names(votes[[1]]) # view all possible subcategories under roll call vote #1
-
-votes[[1]][["Motion"]][[1]] # motion title on roll call vote #1
-
-votes[[3]][["YeaVotes"]][["Count"]] # number of yea votes on roll call vote #3
+## example: get member id's for all representatives voting against the bill
+## on final passage
+votes <- getRollCalls.votes("2007-08", "1001")
+nay_votesFP <- subset(votes, (Motion == "Final Passage" & Vote == "Nay"))
+print(nay_votesFP$MemberId)
 
 }

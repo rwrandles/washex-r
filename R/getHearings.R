@@ -1,23 +1,29 @@
 #' Get hearings regarding a bill
 #'
-#' Get a list of dates, locations, and descriptions, of all
+#' Get a list of dates, locations, and descriptions of all
 #'     committee hearings on a particular bill
 #'
 #' @inheritParams getLegislation
 #'
-#' @return By default, returns a list of hearings. If \code{as.xml = TRUE}, then
-#'     returns the raw XML
+#' @return \code{getHearings} returns an object of type equal to the
+#'     \code{type} argument (defaults to dataframe)
 #' @export
 #'
 #' @examples
-#' getHearings("2007-08", "1001", as.xml = FALSE)
+#' ## get hearings for all senate bills in 2011-12
+#' bills <- getLegislationByYear(c("2011", "2012"))
+#' billsSenate <- subset(bills, OriginalAgency == "Senate")
 #'
-#' @section Note: The resulting XML documents contain multiple
-#'      nested lists. As such, it is not currently compatible with the XML
-#'      package's conversion to the dataframe format. Future revisions
-#'      may be made in order to help with the cleaning process and potentially
-#'      allow for better compatibility with dataframes.
-getHearings <- function(biennium, billNumber, paired = TRUE, as.xml = FALSE) {
+#' \dontrun{getHearings(billsSenate$Biennium, billsSenate$BillNumber, paired = TRUE, type = "df")}
+#'
+#' @section Note: Due to the nature of the resulting XML document,
+#'     the function trims data from excessively nested lists when
+#'     \code{type = "df"}. In order to access the full information, use
+#'     \code{type = "list"} instead.
+getHearings <- function(biennium, billNumber, paired = TRUE, type = c("df", "list", "xml")) {
+  type <- rlang::arg_match(type)
+  billNumber <- as.character(billNumber)
+
   if(!all(grepl(biennium_pattern, biennium))) {
     stop("Biennium formatted incorrectly. Use ?getHearings for more information")
   } else if(!all(as.numeric(substr(biennium,1,4)) >= 1991)) {
@@ -31,24 +37,11 @@ getHearings <- function(biennium, billNumber, paired = TRUE, as.xml = FALSE) {
   } else {
     request <- expand.grid(biennium, billNumber, KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)
   }
-  path <- paste(prefix,
-                "legislationservice.asmx/GetHearings?biennium=",
-                request[1,1], "&billNumber=", request[1,2], sep = "")
 
-  tbl <- tryCatch(XML::xmlParse(path),
-                  error = function(e){
-                    e$message <- errMessage
-                    stop(e)
-                  })
+  if(type == "df") {
+    out <- data.frame()
 
-  if(as.xml) {
-    out <- tbl
-  } else {
-    out <- list("Bill"=XML::xmlToList(tbl))
-  }
-
-  if(nrow(request) > 1) {
-    for(bill in 2:nrow(request)) {
+    for(bill in 1:nrow(request)) {
       path <- paste(prefix,
                     "legislationservice.asmx/GetHearings?biennium=",
                     request[bill,1], "&billNumber=", request[bill,2], sep = "")
@@ -59,19 +52,56 @@ getHearings <- function(biennium, billNumber, paired = TRUE, as.xml = FALSE) {
                         stop(e)
                       })
 
-      if(!as.xml) {
-        tbl <- list("Bill"=XML::xmlToList(tbl))
+      tbl <- purrr::map(XML::xmlToList(tbl), purrr::flatten)
+      tbl <- purrr::map(tbl, ~ purrr::discard(.x, is.null))
+      tbl <- purrr::map(tbl, ~ toss(.x, "Committees"))
+
+      if(length(tbl) > 0) {
+        tbl <- purrr::map(tbl, ~ data.frame(t(matrix(unlist(.x), nrow = length(.x), dimnames = list(names(.x)))),
+                                            stringsAsFactors = FALSE))
+
+        df <- dplyr::bind_rows(tbl)
+        out <- dplyr::bind_rows(out, df)
       }
-
-      out <- c(out,tbl)
     }
-  }
+  } else if(type == "list") {
+    out <- list()
 
-  if(as.xml & nrow(request) > 1) {
-    names(out) <- paste(request[,1],request[,2],sep="//")
-  }
-  if(!as.xml) {
-    names(out) <- paste(request[,1],request[,2],sep="//")
+    for(bill in 1:nrow(request)) {
+      path <- paste(prefix,
+                    "legislationservice.asmx/GetHearings?biennium=",
+                    request[bill,1], "&billNumber=", request[bill,2], sep = "")
+
+      tbl <- tryCatch(XML::xmlParse(path),
+                      error = function(e){
+                        e$message <- errMessage
+                        stop(e)
+                      })
+
+      tbl <- XML::xmlToList(tbl)
+      list <- list(tbl)
+      names(list) <- request[bill,2]
+      if(length(tbl) > 0) {
+        out <- c(out, list)
+      }
+    }
+  } else if(type == "xml") {
+    out <- c()
+
+    for(bill in 1:nrow(request)) {
+      path <- paste(prefix,
+                    "legislationservice.asmx/GetHearings?biennium=",
+                    request[bill,1], "&billNumber=", request[bill,2], sep = "")
+
+      tbl <- tryCatch(XML::xmlParse(path),
+                      error = function(e){
+                        e$message <- errMessage
+                        stop(e)
+                      })
+
+      out <- c(out, tbl)
+    }
+    names(out) <- paste(request[,1], request[,2], sep = "//")
   }
   return(out)
 }

@@ -4,16 +4,18 @@
 \alias{getLegislationByYear}
 \title{Get legislation by year}
 \usage{
-getLegislationByYear(year, as.xml = FALSE)
+getLegislationByYear(year, type = c("df", "list", "xml"))
 }
 \arguments{
-\item{year}{an integer or character string or vector for the given year}
+\item{year}{Character or numeric vector representing the year(s) to be
+searched.}
 
-\item{as.xml}{set to TRUE for raw XML (defaults to FALSE)}
+\item{type}{One of "df", "list", or "xml". Specifies the format for
+the output.}
 }
 \value{
-By default, returns a dataframe. If \code{as.xml = TRUE}, then
-returns the raw XML
+\code{getLegislationByYear} returns an object of type equal to the
+\code{type} argument (defaults to dataframe)
 }
 \description{
 Get a list of all bills introduced during the year

@@ -4,22 +4,30 @@
 \alias{getLegislation}
 \title{Get summary information on a particular bill}
 \usage{
-getLegislation(biennium, billNumber, paired = TRUE, as.xml = FALSE)
+getLegislation(
+  biennium,
+  billNumber,
+  paired = TRUE,
+  type = c("df", "list", "xml")
+)
 }
 \arguments{
-\item{biennium}{either a string or character vector of the form "XXXX-YY"}
+\item{biennium}{Character vector representing the biennium(s) to be
+searched. Each argument should take the form "XXXX-YY"}
 
-\item{billNumber}{an integer or character string or vector containing
-the bill numbers to retrieve}
+\item{billNumber}{Character or numeric vector containing the bill number(s)
+to be retrieved.}
 
-\item{paired}{when TRUE, assumes that equal length vectors represent paired data and
-will be treated as such. Set to FALSE to generate an NxN grid of input arguments}
+\item{paired}{If TRUE, will assume that equal length vectors represent
+paired data. Set to FALSE to generate an NxN grid of input
+arguments. Applies to equal length vector inputs only.}
 
-\item{as.xml}{set to TRUE for raw XML (defaults to FALSE)}
+\item{type}{One of "df", "list", or "xml". Specifies the format for
+the output.}
 }
 \value{
-By default, returns a dataframe. If \code{as.xml = TRUE}, then
-returns the raw XML
+\code{getLegislation} returns an object of type equal to the
+\code{type} argument (defaults to dataframe)
 }
 \description{
 Get legislative summary information for a particular bill,
@@ -28,5 +36,7 @@ description
 }
 \examples{
 getLegislation("2007-08", "1001")
-getLegislation("2007-08", 1001, as.xml = TRUE)
+
+## get XML data for the first 100 hundred bills of the 2007-08 session
+\dontrun{getLegislation("2007-08", 1001:1100, type = "xml")}
 }

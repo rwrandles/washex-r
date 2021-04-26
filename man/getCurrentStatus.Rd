@@ -4,22 +4,30 @@
 \alias{getCurrentStatus}
 \title{Get bill status}
 \usage{
-getCurrentStatus(biennium, billNumber, paired = TRUE, as.xml = FALSE)
+getCurrentStatus(
+  biennium,
+  billNumber,
+  paired = TRUE,
+  type = c("df", "list", "xml")
+)
 }
 \arguments{
-\item{biennium}{either a string or character vector of the form "XXXX-YY"}
+\item{biennium}{Character vector representing the biennium(s) to be
+searched. Each argument should take the form "XXXX-YY"}
 
-\item{billNumber}{an integer or character string or vector containing
-the bill numbers to retrieve}
+\item{billNumber}{Character or numeric vector containing the bill number(s)
+to be retrieved.}
 
-\item{paired}{when TRUE, assumes that equal length vectors represent paired data and
-will be treated as such. Set to FALSE to generate an NxN grid of input arguments}
+\item{paired}{If TRUE, will assume that equal length vectors represent
+paired data. Set to FALSE to generate an NxN grid of input
+arguments. Applies to equal length vector inputs only.}
 
-\item{as.xml}{set to TRUE for raw XML (defaults to FALSE)}
+\item{type}{One of "df", "list", or "xml". Specifies the format for
+the output.}
 }
 \value{
-By default, returns a dataframe. If \code{as.xml = TRUE}, then
-returns the raw XML
+\code{getCurrentStatus} returns an object of type equal to the
+\code{type} argument (defaults to dataframe)
 }
 \description{
 Get the current status of a given bill
@@ -33,5 +41,9 @@ get a bill's complete history, use \code{\link{getStatusChanges}}
 
 \examples{
 getCurrentStatus("2007-08", "1001")
+
+## get final status for all bills written in 2011 or 2012
+billNums <- rbind(getLegislationByYear("2011"), getLegislationByYear("2012"))
+\dontrun{status <- getCurrentStatus("2011-12", billNums$billNumber)}
 
 }

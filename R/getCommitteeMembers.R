@@ -1,12 +1,13 @@
 #' Get committee members
 #'
 #' @inheritParams getLegislation
-#' @param agency either "House" or "Senate", or a vector of agencies
-#' @param name name of the committee or vector of committee names
-#'     (for a list of committee names, see \code{\link{getCommittees}})
+#' @param agency One of "House" or "Senate", or a vector with these as its
+#'      elements.
+#' @param name Character vector of committee names. To get the committee names
+#'      for a particular session, see \code{\link{getCommittees}}.
 #'
-#' @return By default, returns a dataframe. If \code{as.xml = TRUE}, then
-#'     returns the raw XML
+#' @return \code{getCommitteeMembers} returns an object of type equal to the
+#'     \code{type} argument (defaults to dataframe)
 #' @export
 #'
 #' @examples
@@ -14,8 +15,10 @@
 #' years <- c("2011-12","2013-14","2015-16","2017-18")
 #' comms <- c("Education","Judiciary","Rules")
 #'
-#' getCommitteeMembers(years,agency = "House",comms)
-getCommitteeMembers <- function(biennium, agency, name, paired = FALSE, as.xml = FALSE) {
+#' getCommitteeMembers(years, agency = "House", comms)
+getCommitteeMembers <- function(biennium, agency = c("House", "Senate"), name, paired = FALSE, type = c("df", "list", "xml")) {
+  type <- rlang::arg_match(type)
+
   if(!all(grepl(biennium_pattern, biennium))) {
     stop("Biennium formatted incorrectly. Use ?getCommitteeMembers for more information")
   } else if(!all(as.numeric(substr(biennium,1,4)) >= 1991)) {
@@ -36,29 +39,10 @@ getCommitteeMembers <- function(biennium, agency, name, paired = FALSE, as.xml =
     request <- expand.grid(biennium, agency, name, KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)
   }
 
-  path <- paste(prefix,
-                "CommitteeService.asmx/GetCommitteeMembers?biennium=",
-                request[1,1], "&agency=", request[1,2], "&committeeName=",
-                gsub("&", "%26", gsub(" ", "%20", request[1,3])), sep = "")
+  if(type == "df") {
+    out <- data.frame()
 
-  tbl <- tryCatch(XML::xmlParse(path),
-                  error = function(e){
-                    e$message <- errMessage
-                    stop(e)
-                  })
-
-  if(as.xml) {
-    out <- tbl
-  } else {
-    out <- tibble::as_tibble(XML::xmlToDataFrame(tbl,
-                                                 stringsAsFactors = FALSE))
-    out$Biennium <- request[1,1]
-    out$Agency <- request[1,2]
-    out$Name <- request[1,3]
-  }
-
-  if(nrow(request) > 1) {
-    for(bill in 2:nrow(request)) {
+    for(bill in 1:nrow(request)) {
       path <- paste(prefix,
                     "CommitteeService.asmx/GetCommitteeMembers?biennium=",
                     request[bill,1], "&agency=", request[bill,2], "&committeeName=",
@@ -70,26 +54,57 @@ getCommitteeMembers <- function(biennium, agency, name, paired = FALSE, as.xml =
                         stop(e)
                       })
 
-      if(as.xml) {
-        out <- c(out,tbl)
-      } else {
-        tbl <- tibble::as_tibble(XML::xmlToDataFrame(tbl,
-                                                     stringsAsFactors = FALSE))
+      tbl <- XML::xmlToDataFrame(tbl,
+                                 stringsAsFactors = FALSE)
+      if(nrow(tbl) > 0) {
         tbl$Biennium <- request[bill,1]
         tbl$Agency <- request[bill,2]
-        tbl$Name <- request[bill,3]
-
+        tbl$CommitteeName <- request[bill,3]
+        tbl <- tbl[c("Biennium", "Agency", "CommitteeName",
+                     setdiff(names(tbl), c("Biennium", "Agency", "CommitteeName")))]
         out <- rbind(out, tbl)
       }
     }
-  }
+  } else if(type == "list") {
+    out <- list()
 
-  if(as.xml & nrow(request) > 1) {
-    names(out) <- paste(request[,1],request[,2],request[,3],sep="//")
-  }
-  if(!as.xml) {
-    out <- out[c("Biennium","Agency","Name",
-                 setdiff(names(out),c("Biennium", "Agency", "Name")))]
+    for(bill in 1:nrow(request)) {
+      path <- paste(prefix,
+                    "CommitteeService.asmx/GetCommitteeMembers?biennium=",
+                    request[bill,1], "&agency=", request[bill,2], "&committeeName=",
+                    gsub("&", "%26", gsub(" ", "%20", request[bill,3])), sep = "")
+
+      tbl <- tryCatch(XML::xmlParse(path),
+                      error = function(e){
+                        e$message <- errMessage
+                        stop(e)
+                      })
+
+      tbl <- XML::xmlToList(tbl)
+      list <- list(tbl)
+      names(list) <- request[bill,3]
+      if(length(tbl) > 0) {
+        out <- c(out, list)
+      }
+    }
+  } else if(type == "xml") {
+    out <- c()
+
+    for(bill in 1:nrow(request)) {
+      path <- paste(prefix,
+                    "CommitteeService.asmx/GetCommitteeMembers?biennium=",
+                    request[bill,1], "&agency=", request[bill,2], "&committeeName=",
+                    gsub("&", "%26", gsub(" ", "%20", request[bill,3])), sep = "")
+
+      tbl <- tryCatch(XML::xmlParse(path),
+                      error = function(e){
+                        e$message <- errMessage
+                        stop(e)
+                      })
+
+      out <- c(out, tbl)
+    }
+    names(out) <- paste(request[,1], request[,2], request[,3], sep = "//")
   }
   return(out)
 }

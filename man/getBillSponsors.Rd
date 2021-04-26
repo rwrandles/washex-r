@@ -4,23 +4,26 @@
 \alias{getBillSponsors}
 \title{Get sponsor information for a bill}
 \usage{
-getBillSponsors(biennium, billId, paired = TRUE, as.xml = FALSE)
+getBillSponsors(biennium, billId, paired = TRUE, type = c("df", "list", "xml"))
 }
 \arguments{
-\item{biennium}{either a string or character vector of the form "XXXX-YY"}
+\item{biennium}{Character vector representing the biennium(s) to be
+searched. Each argument should take the form "XXXX-YY"}
 
-\item{billId}{a string or vector of character strings of the format
-"XX YYYY", where XX is the prefix (HB, SB, etc.) and YYYY is the
-bill number}
+\item{billId}{Character vector containing the bill(s) to be retrieved.
+Each argument should take the form "XX YYYY", where XX
+is the prefix (HB, SB, etc.) and YYYY is the bill number.}
 
-\item{paired}{when TRUE, assumes that equal length vectors represent paired data and
-will be treated as such. Set to FALSE to generate an NxN grid of input arguments}
+\item{paired}{If TRUE, will assume that equal length vectors represent
+paired data. Set to FALSE to generate an NxN grid of input
+arguments. Applies to equal length vector inputs only.}
 
-\item{as.xml}{set to TRUE for raw XML (defaults to FALSE)}
+\item{type}{One of "df", "list", or "xml". Specifies the format for
+the output.}
 }
 \value{
-By default, returns a dataframe. If \code{as.xml = TRUE}, then
-returns the raw XML
+\code{getBillSponsors} returns an object of type equal to the
+\code{type} argument (defaults to dataframe)
 }
 \description{
 Get sponsor information for a bill
@@ -29,5 +32,5 @@ Get sponsor information for a bill
 ## get the list of all sponsors on a set of bills, filtered for primary sponsorship
 
 spons <- getBillSponsors("2007-08", c("HB 1001", "HB 1002", "HB 1003"))
-spons <- subset(spons, Type == "Primary")
+sponsP <- subset(spons, Type == "Primary")
 }

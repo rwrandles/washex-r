@@ -4,33 +4,42 @@
 \alias{getAmendments}
 \title{Get amendments to a bill}
 \usage{
-getAmendments(biennium, billNumber, paired = TRUE, as.xml = FALSE)
+getAmendments(
+  biennium,
+  billNumber,
+  paired = TRUE,
+  type = c("df", "list", "xml")
+)
 }
 \arguments{
-\item{biennium}{either a string or character vector of the form "XXXX-YY"}
+\item{biennium}{Character vector representing the biennium(s) to be
+searched. Each argument should take the form "XXXX-YY"}
 
-\item{billNumber}{an integer or character string or vector containing
-the bill numbers to retrieve}
+\item{billNumber}{Character or numeric vector containing the bill number(s)
+to be retrieved.}
 
-\item{paired}{when TRUE, assumes that equal length vectors represent paired data and
-will be treated as such. Set to FALSE to generate an NxN grid of input arguments}
+\item{paired}{If TRUE, will assume that equal length vectors represent
+paired data. Set to FALSE to generate an NxN grid of input
+arguments. Applies to equal length vector inputs only.}
 
-\item{as.xml}{set to TRUE for raw XML (defaults to FALSE)}
+\item{type}{One of "df", "list", or "xml". Specifies the format for
+the output.}
 }
 \value{
-By default, returns a dataframe. If \code{as.xml = TRUE}, then
-returns the raw XML
+\code{getAmendments} returns an object of type equal to the
+\code{type} argument (defaults to dataframe)
 }
 \description{
 Get a list of all proposed amendments (accepted and rejected) on the bill,
 including the URL to the amendment text
 }
 \examples{
-getAmendments("2007-08", "1001", as.xml = FALSE)
+## get amendments for a single bill
+getAmendments("2007-08", "1001")
 
 ## get amendments for a specific set of bills
 years <- c("2005-06","2007-08","2007-08","2009-10")
 bills <- c(1447,1219,1001,2680)
 
-getAmendments(years, bills, as.xml = FALSE)
+getAmendments(years, bills, paired = TRUE, type = "df")
 }
