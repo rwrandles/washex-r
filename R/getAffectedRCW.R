@@ -45,11 +45,10 @@ getAffectedRCW <- function(biennium, billId, paired = TRUE, type = c("df", "list
                     "legislationservice.asmx/GetRcwCitesAffected?biennium=",
                     request[bill,1], "&billId=", gsub(" ", "%20", request[bill,2]), sep = "")
 
-      tbl <- tryCatch(XML::xmlParse(path),
-                      error = function(e){
-                        e$message <- errMessage
-                        stop(e)
-                      })
+      tbl <- fetch(path)
+      if(is.null(tbl)) {
+        return(NULL)
+      }
 
       tbl <- XML::xmlToDataFrame(tbl,
                                  stringsAsFactors = FALSE)
@@ -70,11 +69,10 @@ getAffectedRCW <- function(biennium, billId, paired = TRUE, type = c("df", "list
                     "legislationservice.asmx/GetRcwCitesAffected?biennium=",
                     request[bill,1], "&billId=", gsub(" ", "%20", request[bill,2]), sep = "")
 
-      tbl <- tryCatch(XML::xmlParse(path),
-                      error = function(e){
-                        e$message <- errMessage
-                        stop(e)
-                      })
+      tbl <- fetch(path)
+      if(is.null(tbl)) {
+        return(NULL)
+      }
 
       tbl <- XML::xmlToList(tbl)
       list <- list(tbl)
@@ -91,11 +89,10 @@ getAffectedRCW <- function(biennium, billId, paired = TRUE, type = c("df", "list
                     "legislationservice.asmx/GetRcwCitesAffected?biennium=",
                     request[bill,1], "&billId=", gsub(" ", "%20", request[bill,2]), sep = "")
 
-      tbl <- tryCatch(XML::xmlParse(path),
-                      error = function(e){
-                        e$message <- errMessage
-                        stop(e)
-                      })
+      tbl <- fetch(path)
+      if(is.null(tbl)) {
+        return(NULL)
+      }
 
       out <- c(out,tbl)
     }

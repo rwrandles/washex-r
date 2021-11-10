@@ -3,9 +3,9 @@ test_that("function works for each input type", {
   l <- getAffectedRCW("2007-08", "HB 1001", type = "list")
   x <- getAffectedRCW("2007-08", "HB 1001", type = "xml")
 
-  expect_s3_class(d, "data.frame")
-  expect_type(l, "list")
-  expect_type(x[[1]], "externalptr")
+  expect_true(any(class(d) == "data.frame",is.null(d)))
+  expect_true(any(typeof(l) == "list",is.null(l)))
+  expect_true(any(typeof(x[[1]]) == "externalptr",is.null(x)))
 })
 
 test_that("function handles vector inputs", {
@@ -15,9 +15,9 @@ test_that("function handles vector inputs", {
   l <- getAffectedRCW("2007-08", bills, type = "list")
   x <- getAffectedRCW("2007-08", bills, type = "xml")
 
-  expect_equal(unique(d$BillId), bills)
-  expect_equal(names(l), bills)
-  expect_equal(names(x), paste("2007-08", bills, sep = "//"))
+  expect_true(any(identical(unique(d$BillId),bills),is.null(d)))
+  expect_true(any(identical(names(l),bills),is.null(l)))
+  expect_true(any(identical(names(x),paste("2007-08", bills, sep = "//")),is.null(x)))
 })
 
 test_that("function checks for proper formatting", {

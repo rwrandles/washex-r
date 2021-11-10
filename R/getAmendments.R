@@ -44,11 +44,10 @@ getAmendments <- function(biennium, billNumber, paired = TRUE, type = c("df", "l
                     "legislationservice.asmx/GetAmendmentsForBiennium?biennium=",
                     request[bill,1], "&billNumber=", request[bill,2], sep = "")
 
-      tbl <- tryCatch(XML::xmlParse(path),
-                      error = function(e){
-                        e$message <- errMessage
-                        stop(e)
-                      })
+      tbl <- fetch(path)
+      if(is.null(tbl)) {
+        return(NULL)
+      }
 
       tbl <- XML::xmlToDataFrame(tbl,
                                  stringsAsFactors = FALSE)
@@ -69,11 +68,10 @@ getAmendments <- function(biennium, billNumber, paired = TRUE, type = c("df", "l
                     "legislationservice.asmx/GetAmendmentsForBiennium?biennium=",
                     request[bill,1], "&billNumber=", request[bill,2], sep = "")
 
-      tbl <- tryCatch(XML::xmlParse(path),
-                      error = function(e){
-                        e$message <- errMessage
-                        stop(e)
-                      })
+      tbl <- fetch(path)
+      if(is.null(tbl)) {
+        return(NULL)
+      }
 
       tbl <- XML::xmlToList(tbl)
       list <- list(tbl)
@@ -90,11 +88,10 @@ getAmendments <- function(biennium, billNumber, paired = TRUE, type = c("df", "l
                     "legislationservice.asmx/GetAmendmentsForBiennium?biennium=",
                     request[bill,1], "&billNumber=", request[bill,2], sep = "")
 
-      tbl <- tryCatch(XML::xmlParse(path),
-                      error = function(e){
-                        e$message <- errMessage
-                        stop(e)
-                      })
+      tbl <- fetch(path)
+      if(is.null(tbl)) {
+        return(NULL)
+      }
 
       out <- c(out,tbl)
     }

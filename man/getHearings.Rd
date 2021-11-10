@@ -38,7 +38,7 @@ the function trims data from excessively nested lists when
 \examples{
 ## get hearings for all senate bills in 2011
 bills <- getLegislationByYear("2011")
-billsSenate <- subset(bills, OriginalAgency == "Senate")
+if(!is.null(bills)) billsSenate <- subset(bills, OriginalAgency == "Senate")
 
 \dontrun{getHearings(billsSenate$Biennium, billsSenate$BillNumber, paired = TRUE, type = "df")}
 

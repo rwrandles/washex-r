@@ -12,15 +12,18 @@
 #'
 #' @examples
 #' votes <- getRollCalls.summary("2007-08", "1001") # get roll call votes
-#'
-#' length(votes) # total number of roll call votes recorded
-#' votes$CountYeas[3] # number of yea votes on roll call vote #3
+#' if(!is.null(votes)) {
+#'   length(votes) # total number of roll call votes recorded
+#'   votes$CountYeas[3] # number of yea votes on roll call vote #3
+#' }
 #'
 #' ## example: get member id's for all representatives voting against the bill
 #' ## on final passage
 #' votes <- getRollCalls.votes("2007-08", "1001")
-#' nay_votesFP <- subset(votes, (Motion == "Final Passage" & Vote == "Nay"))
-#' print(nay_votesFP$MemberId)
+#' if(!is.null(votes)) {
+#'   nay_votesFP <- subset(votes, (Motion == "Final Passage" & Vote == "Nay"))
+#'   print(nay_votesFP$MemberId)
+#' }
 #'
 #' @section Note: Due to the nested nature of the resulting document,
 #'     we provide various functions to present simplified views of the data
@@ -56,11 +59,10 @@ getRollCalls.xml <- function(biennium, billNumber, paired = TRUE) {
                   "legislationservice.asmx/GetRollCalls?biennium=",
                   biennium, "&billNumber=", billNumber, sep = "")
 
-    tbl <- tryCatch(XML::xmlParse(path),
-                    error = function(e) {
-                      e$message <- errMessage
-                      stop(e)
-                    })
+    tbl <- fetch(path)
+    if(is.null(tbl)) {
+      return(NULL)
+    }
 
     out <- c(out, tbl)
   }
@@ -93,6 +95,9 @@ getRollCalls.summary <- function(biennium, billNumber, paired = TRUE, type = c("
 
     for(bill in 1:nrow(request)) {
       xml <- unname(getRollCalls.xml(request[bill,1], request[bill,2]))
+      if(is.null(xml)) {
+        return(NULL)
+      }
 
       tbl <- XML::xmlToList(xml[[1]])
 
@@ -169,6 +174,9 @@ getRollCalls.votes <- function(biennium, billNumber, paired = TRUE, type = c("df
 
     for(bill in 1:nrow(request)) {
       xml <- unname(getRollCalls.xml(request[bill,1], request[bill,2]))
+      if(is.null(xml)) {
+        return(NULL)
+      }
 
       tbl <- XML::xmlToList(xml[[1]])
       tbl <- purrr::map(tbl, purrr::flatten)

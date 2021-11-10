@@ -13,7 +13,7 @@
 #' ## get the list of all sponsors on a set of bills, filtered for primary sponsorship
 #'
 #' spons <- getBillSponsors("2007-08", c("HB 1001", "HB 1002", "HB 1003"))
-#' sponsP <- subset(spons, Type == "Primary")
+#' if(!is.null(spons)) sponsP <- subset(spons, Type == "Primary")
 getBillSponsors <- function(biennium, billId, paired = TRUE, type = c("df", "list", "xml")) {
   type <- rlang::arg_match(type)
 
@@ -39,11 +39,10 @@ getBillSponsors <- function(biennium, billId, paired = TRUE, type = c("df", "lis
                     "legislationservice.asmx/GetSponsors?biennium=",
                     request[bill,1], "&billId=", request[bill,2], sep = "")
 
-      tbl <- tryCatch(XML::xmlParse(path),
-                      error = function(e){
-                        e$message <- errMessage
-                        stop(e)
-                      })
+      tbl <- fetch(path)
+      if(is.null(tbl)) {
+        return(NULL)
+      }
 
       tbl <- XML::xmlToDataFrame(tbl,
                                  stringsAsFactors = FALSE)
@@ -64,11 +63,10 @@ getBillSponsors <- function(biennium, billId, paired = TRUE, type = c("df", "lis
                     "legislationservice.asmx/GetSponsors?biennium=",
                     request[bill,1], "&billId=", request[bill,2], sep = "")
 
-      tbl <- tryCatch(XML::xmlParse(path),
-                      error = function(e){
-                        e$message <- errMessage
-                        stop(e)
-                      })
+      tbl <- fetch(path)
+      if(is.null(tbl)) {
+        return(NULL)
+      }
 
       tbl <- XML::xmlToList(tbl)
       list <- list(tbl)
@@ -86,11 +84,10 @@ getBillSponsors <- function(biennium, billId, paired = TRUE, type = c("df", "lis
                     "legislationservice.asmx/GetSponsors?biennium=",
                     request[bill,1], "&billId=", request[bill,2], sep = "")
 
-      tbl <- tryCatch(XML::xmlParse(path),
-                      error = function(e){
-                        e$message <- errMessage
-                        stop(e)
-                      })
+      tbl <- fetch(path)
+      if(is.null(tbl)) {
+        return(NULL)
+      }
 
       out <- c(out,tbl)
     }

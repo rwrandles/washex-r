@@ -32,5 +32,5 @@ Get sponsor information for a bill
 ## get the list of all sponsors on a set of bills, filtered for primary sponsorship
 
 spons <- getBillSponsors("2007-08", c("HB 1001", "HB 1002", "HB 1003"))
-sponsP <- subset(spons, Type == "Primary")
+if(!is.null(spons)) sponsP <- subset(spons, Type == "Primary")
 }

@@ -48,11 +48,10 @@ getCommitteeMembers <- function(biennium, agency = c("House", "Senate"), name, p
                     request[bill,1], "&agency=", request[bill,2], "&committeeName=",
                     gsub("&", "%26", gsub(" ", "%20", request[bill,3])), sep = "")
 
-      tbl <- tryCatch(XML::xmlParse(path),
-                      error = function(e){
-                        e$message <- errMessage
-                        stop(e)
-                      })
+      tbl <- fetch(path)
+      if(is.null(tbl)) {
+        return(NULL)
+      }
 
       tbl <- XML::xmlToDataFrame(tbl,
                                  stringsAsFactors = FALSE)
@@ -75,11 +74,10 @@ getCommitteeMembers <- function(biennium, agency = c("House", "Senate"), name, p
                     request[bill,1], "&agency=", request[bill,2], "&committeeName=",
                     gsub("&", "%26", gsub(" ", "%20", request[bill,3])), sep = "")
 
-      tbl <- tryCatch(XML::xmlParse(path),
-                      error = function(e){
-                        e$message <- errMessage
-                        stop(e)
-                      })
+      tbl <- fetch(path)
+      if(is.null(tbl)) {
+        return(NULL)
+      }
 
       tbl <- XML::xmlToList(tbl)
       list <- list(tbl)
@@ -97,11 +95,10 @@ getCommitteeMembers <- function(biennium, agency = c("House", "Senate"), name, p
                     request[bill,1], "&agency=", request[bill,2], "&committeeName=",
                     gsub("&", "%26", gsub(" ", "%20", request[bill,3])), sep = "")
 
-      tbl <- tryCatch(XML::xmlParse(path),
-                      error = function(e){
-                        e$message <- errMessage
-                        stop(e)
-                      })
+      tbl <- fetch(path)
+      if(is.null(tbl)) {
+        return(NULL)
+      }
 
       out <- c(out, tbl)
     }

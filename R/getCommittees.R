@@ -28,11 +28,10 @@ getCommittees <- function(biennium, type = c("df", "list", "xml")) {
                     "CommitteeService.asmx/GetCommittees?biennium=",
                     biennium[i], sep = "")
 
-      tbl <- tryCatch(XML::xmlParse(path),
-                      error = function(e){
-                        e$message <- errMessage
-                        stop(e)
-                      })
+      tbl <- fetch(path)
+      if(is.null(tbl)) {
+        return(NULL)
+      }
 
       tbl <- XML::xmlToDataFrame(tbl,
                                  stringsAsFactors = FALSE)
@@ -52,11 +51,10 @@ getCommittees <- function(biennium, type = c("df", "list", "xml")) {
                     "CommitteeService.asmx/GetCommittees?biennium=",
                     biennium[i], sep = "")
 
-      tbl <- tryCatch(XML::xmlParse(path),
-                      error = function(e){
-                        e$message <- errMessage
-                        stop(e)
-                      })
+      tbl <- fetch(path)
+      if(is.null(tbl)) {
+        return(NULL)
+      }
 
       tbl <- XML::xmlToList(tbl)
       list <- list(tbl)
@@ -73,11 +71,10 @@ getCommittees <- function(biennium, type = c("df", "list", "xml")) {
                     "CommitteeService.asmx/GetCommittees?biennium=",
                     biennium[i], sep = "")
 
-      tbl <- tryCatch(XML::xmlParse(path),
-                      error = function(e){
-                        e$message <- errMessage
-                        stop(e)
-                      })
+      tbl <- fetch(path)
+      if(is.null(tbl)) {
+        return(NULL)
+      }
 
       out <- c(out, tbl)
     }

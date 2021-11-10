@@ -1,8 +1,7 @@
 ## Resubmission
 This is a resubmission. In this version I have:
 
-* Corrected URLs in README to include protocol prefix
-* Revised examples to hit runtime targets
+* Updated the HTTP request protocol to fail gracefully with a connection failure
 
 ## Test environments
 * local OS X install, R 4.0.2
@@ -13,15 +12,7 @@ This is a resubmission. In this version I have:
 * win_builder, devel
 
 ## R CMD check results
-There were no ERRORs or WARNINGs
-
-There is 1 NOTE:
-
-* checking CRAN incoming feasibility ... NOTE
-  Maintainer: 'Rohnin Randles <rrandles@princeton.edu>' 
-  New submission
-  
-  This is the initial submission for this package.
+There were no ERRORs, WARNINGs, or NOTEs
 
 ## Downstream dependencies
 There are currently no downstream dependencies for this package

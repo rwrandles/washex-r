@@ -3,9 +3,9 @@ test_that("function works for each input type", {
   l <- getCommitteeMembers("2007-08", "House", "Rules", type = "list")
   x <- getCommitteeMembers("2007-08", "House", "Rules", type = "xml")
 
-  expect_s3_class(d, "data.frame")
-  expect_type(l, "list")
-  expect_type(x[[1]], "externalptr")
+  expect_true(any(class(d) == "data.frame",is.null(d)))
+  expect_true(any(typeof(l) == "list",is.null(l)))
+  expect_true(any(typeof(x[[1]]) == "externalptr",is.null(x)))
 })
 
 test_that("function handles vector inputs", {
@@ -15,9 +15,9 @@ test_that("function handles vector inputs", {
   l <- getCommitteeMembers("2007-08", "House", comms, type = "list")
   x <- getCommitteeMembers("2007-08", "House", comms, type = "xml")
 
-  expect_equal(unique(d$CommitteeName), comms)
-  expect_equal(names(l), comms)
-  expect_equal(names(x), paste("2007-08", "House", comms, sep = "//"))
+  expect_true(any(identical(unique(d$CommitteeName),comms),is.null(d)))
+  expect_true(any(identical(names(l),comms),is.null(l)))
+  expect_true(any(identical(names(x),paste("2007-08", "House", comms, sep = "//")),is.null(x)))
 })
 
 test_that("function checks for proper formatting", {
@@ -29,5 +29,6 @@ test_that("function properly addresses capitalization", {
   x <- getCommitteeMembers("2007-08", "house", "Rules")
   y <- getCommitteeMembers("2007-08", "House", "Rules")
 
+  expect_true(any(x==y,is.null(x),is.null(y)))
   expect_equal(x, y)
 })

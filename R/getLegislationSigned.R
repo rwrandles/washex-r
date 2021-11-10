@@ -43,11 +43,10 @@ getLegislationSigned <- function(biennium, agency = c("House", "Senate"), paired
                     "legislationservice.asmx/GetLegislationGovernorSigned?biennium=",
                     request[bill,1], "&agency=", request[bill,2], sep = "")
 
-      tbl <- tryCatch(XML::xmlParse(path),
-                      error = function(e){
-                        e$message <- errMessage
-                        stop(e)
-                      })
+      tbl <- fetch(path)
+      if(is.null(tbl)) {
+        return(NULL)
+      }
 
       tbl <- XML::xmlToDataFrame(tbl,
                                  stringsAsFactors = FALSE)
@@ -69,11 +68,10 @@ getLegislationSigned <- function(biennium, agency = c("House", "Senate"), paired
                     "legislationservice.asmx/GetLegislationGovernorSigned?biennium=",
                     request[bill,1], "&agency=", request[bill,2], sep = "")
 
-      tbl <- tryCatch(XML::xmlParse(path),
-                      error = function(e){
-                        e$message <- errMessage
-                        stop(e)
-                      })
+      tbl <- fetch(path)
+      if(is.null(tbl)) {
+        return(NULL)
+      }
 
       tbl <- XML::xmlToList(tbl)
       list <- list(tbl)
@@ -90,11 +88,10 @@ getLegislationSigned <- function(biennium, agency = c("House", "Senate"), paired
                     "legislationservice.asmx/GetLegislationGovernorSigned?biennium=",
                     request[bill,1], "&agency=", request[bill,2], sep = "")
 
-      tbl <- tryCatch(XML::xmlParse(path),
-                      error = function(e){
-                        e$message <- errMessage
-                        stop(e)
-                      })
+      tbl <- fetch(path)
+      if(is.null(tbl)) {
+        return(NULL)
+      }
 
       out <- c(out, tbl)
     }

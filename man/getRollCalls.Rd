@@ -51,14 +51,17 @@ full, original data, use \code{getRollCalls.xml} instead.
 
 \examples{
 votes <- getRollCalls.summary("2007-08", "1001") # get roll call votes
-
-length(votes) # total number of roll call votes recorded
-votes$CountYeas[3] # number of yea votes on roll call vote #3
+if(!is.null(votes)) {
+  length(votes) # total number of roll call votes recorded
+  votes$CountYeas[3] # number of yea votes on roll call vote #3
+}
 
 ## example: get member id's for all representatives voting against the bill
 ## on final passage
 votes <- getRollCalls.votes("2007-08", "1001")
-nay_votesFP <- subset(votes, (Motion == "Final Passage" & Vote == "Nay"))
-print(nay_votesFP$MemberId)
+if(!is.null(votes)) {
+  nay_votesFP <- subset(votes, (Motion == "Final Passage" & Vote == "Nay"))
+  print(nay_votesFP$MemberId)
+}
 
 }

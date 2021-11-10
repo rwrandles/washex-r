@@ -26,11 +26,10 @@ getSponsors <- function(biennium, type = c("df", "list", "xml")) {
       path <- paste(prefix,
                     "sponsorservice.asmx/GetSponsors?biennium=",
                     year, sep = "")
-      tbl <- tryCatch(XML::xmlParse(path),
-                      error = function(e){
-                        e$message <- errMessage
-                        stop(e)
-                      })
+      tbl <- fetch(path)
+      if(is.null(tbl)) {
+        return(NULL)
+      }
 
       tbl <- XML::xmlToDataFrame(tbl,
                                  stringsAsFactors = FALSE)
@@ -49,11 +48,10 @@ getSponsors <- function(biennium, type = c("df", "list", "xml")) {
       path <- paste(prefix,
                     "sponsorservice.asmx/GetSponsors?biennium=",
                     year, sep = "")
-      tbl <- tryCatch(XML::xmlParse(path),
-                      error = function(e){
-                        e$message <- errMessage
-                        stop(e)
-                      })
+      tbl <- fetch(path)
+      if(is.null(tbl)) {
+        return(NULL)
+      }
 
       tbl <- XML::xmlToList(tbl)
       list <- list(tbl)
@@ -69,11 +67,10 @@ getSponsors <- function(biennium, type = c("df", "list", "xml")) {
       path <- paste(prefix,
                     "sponsorservice.asmx/GetSponsors?biennium=",
                     year, sep = "")
-      tbl <- tryCatch(XML::xmlParse(path),
-                      error = function(e){
-                        e$message <- errMessage
-                        stop(e)
-                      })
+      tbl <- fetch(path)
+      if(is.null(tbl)) {
+        return(NULL)
+      }
 
       tbl <- XML::xmlParse(tbl)
 

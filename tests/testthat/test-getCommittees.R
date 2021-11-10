@@ -3,9 +3,9 @@ test_that("function works for each input type", {
   l <- getCommittees("2007-08", type = "list")
   x <- getCommittees("2007-08", type = "xml")
 
-  expect_s3_class(d, "data.frame")
-  expect_type(l, "list")
-  expect_type(x[[1]], "externalptr")
+  expect_true(any(class(d) == "data.frame",is.null(d)))
+  expect_true(any(typeof(l) == "list",is.null(l)))
+  expect_true(any(typeof(x[[1]]) == "externalptr",is.null(x)))
 })
 
 test_that("function handles vector inputs", {
@@ -15,9 +15,9 @@ test_that("function handles vector inputs", {
   l <- getCommittees(bienns, type = "list")
   x <- getCommittees(bienns, type = "xml")
 
-  expect_equal(unique(d$Biennium), bienns)
-  expect_equal(names(l), bienns)
-  expect_equal(names(x), bienns)
+  expect_true(any(identical(unique(d$Biennium),bienns),is.null(d)))
+  expect_true(any(identical(names(l),bienns),is.null(l)))
+  expect_true(any(identical(names(x),bienns),is.null(x)))
 })
 
 test_that("function checks for proper formatting", {

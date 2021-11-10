@@ -44,11 +44,10 @@ getStatusChanges <- function(biennium, billNumber, paired = TRUE, type = c("df",
                     gsub(" ", "%20", request[bill,1]), "&billNumber=", gsub(" ", "%20", request[bill,2]),
                     "&beginDate=", beginDate, "&endDate=", endDate, sep="")
 
-      tbl <- tryCatch(XML::xmlParse(path),
-                      error = function(e){
-                        e$message <- errMessage
-                        stop(e)
-                      })
+      tbl <- fetch(path)
+      if(is.null(tbl)) {
+        return(NULL)
+      }
 
       tbl <- XML::xmlToDataFrame(tbl,
                                  stringsAsFactors = FALSE)
@@ -73,11 +72,10 @@ getStatusChanges <- function(biennium, billNumber, paired = TRUE, type = c("df",
                     gsub(" ", "%20", request[bill,1]), "&billNumber=", gsub(" ", "%20", request[bill,2]),
                     "&beginDate=", beginDate, "&endDate=", endDate, sep="")
 
-      tbl <- tryCatch(XML::xmlParse(path),
-                      error = function(e){
-                        e$message <- errMessage
-                        stop(e)
-                      })
+      tbl <- fetch(path)
+      if(is.null(tbl)) {
+        return(NULL)
+      }
 
       tbl <- XML::xmlToList(tbl)
       list <- list(tbl)
@@ -98,11 +96,10 @@ getStatusChanges <- function(biennium, billNumber, paired = TRUE, type = c("df",
                     gsub(" ", "%20", request[bill,1]), "&billNumber=", gsub(" ", "%20", request[bill,2]),
                     "&beginDate=", beginDate, "&endDate=", endDate, sep="")
 
-      tbl <- tryCatch(XML::xmlParse(path),
-                      error = function(e){
-                        e$message <- errMessage
-                        stop(e)
-                      })
+      tbl <- fetch(path)
+      if(is.null(tbl)) {
+        return(NULL)
+      }
 
       tbl <- XML::xmlParse(tbl)
 

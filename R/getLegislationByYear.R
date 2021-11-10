@@ -29,11 +29,10 @@ getLegislationByYear <- function(year, type = c("df", "list", "xml")) {
       path <- paste(prefix, "legislationservice.asmx/GetLegislationByYear?year=",
                     gsub(" ", "%20", year[i]), sep = "")
 
-      tbl <- tryCatch(XML::xmlParse(path),
-                      error = function(e){
-                        e$message <- errMessage
-                        stop(e)
-                      })
+      tbl <- fetch(path)
+      if(is.null(tbl)) {
+        return(NULL)
+      }
 
       tbl <- XML::xmlToDataFrame(tbl,
                                  stringsAsFactors = FALSE)
@@ -52,11 +51,10 @@ getLegislationByYear <- function(year, type = c("df", "list", "xml")) {
       path <- paste(prefix, "legislationservice.asmx/GetLegislationByYear?year=",
                     gsub(" ", "%20", year[i]), sep = "")
 
-      tbl <- tryCatch(XML::xmlParse(path),
-                      error = function(e){
-                        e$message <- errMessage
-                        stop(e)
-                      })
+      tbl <- fetch(path)
+      if(is.null(tbl)) {
+        return(NULL)
+      }
 
       tbl <- XML::xmlToList(tbl)
       list <- list(tbl)
@@ -72,11 +70,10 @@ getLegislationByYear <- function(year, type = c("df", "list", "xml")) {
       path <- paste(prefix, "legislationservice.asmx/GetLegislationByYear?year=",
                     gsub(" ", "%20", year[i]), sep = "")
 
-      tbl <- tryCatch(XML::xmlParse(path),
-                      error = function(e){
-                        e$message <- errMessage
-                        stop(e)
-                      })
+      tbl <- fetch(path)
+      if(is.null(tbl)) {
+        return(NULL)
+      }
 
       out <- c(out, tbl)
     }
