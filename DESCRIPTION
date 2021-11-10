@@ -1,6 +1,6 @@
 Package: washex
 Title: Washington State Legislative Explorer
-Version: 1.0.1
+Version: 1.1.0
 Authors@R: 
     person(given = "Rohnin",
            family = "Randles",
