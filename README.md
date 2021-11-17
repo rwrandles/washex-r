@@ -9,7 +9,7 @@
 status](https://www.r-pkg.org/badges/version/washex)](https://CRAN.R-project.org/package=washex)
 [![R-CMD-check](https://github.com/rwrandles/washex-r/workflows/R-CMD-check/badge.svg)](https://github.com/rwrandles/washex-r/actions)
 [![Travis build
-status](https://travis-ci.com/rwrandles/washex-r.svg?branch=main)](https://travis-ci.com/rwrandles/washex-r)
+status](https://travis-ci.com/rwrandles/washex-r.svg?branch=main)](https://app.travis-ci.com/rwrandles/washex-r.svg?branch=main)
 <!-- badges: end -->
 
 The **Wash**ington **Ex**plorer (WashEx) package creates an interface
