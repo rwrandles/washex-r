@@ -14,8 +14,8 @@ status](https://travis-ci.com/rwrandles/washex-r.svg?branch=main)](https://app.t
 
 The **Wash**ington **Ex**plorer (WashEx) package creates an interface
 between R and the [Washington State Legislative Web
-Services](http://wslwebservices.leg.wa.gov). It serves as a companion to
-[Legislative Explorer: Washington](http://legex.org/wa/process), a
+Services](https://wslwebservices.leg.wa.gov). It serves as a companion
+to [Legislative Explorer: Washington](http://legex.org/wa/process), a
 project developed by John Wilkerson and Rohnin Randles at the University
 of Washington. The package contains functions to retrieve data regarding
 the following:

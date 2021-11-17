@@ -37,7 +37,7 @@ getBillSponsors <- function(biennium, billId, paired = TRUE, type = c("df", "lis
     for(bill in 1:nrow(request)) {
       path <- paste(prefix,
                     "legislationservice.asmx/GetSponsors?biennium=",
-                    request[bill,1], "&billId=", request[bill,2], sep = "")
+                    request[bill,1], "&billId=", gsub(" ", "%20", request[bill,2]), sep = "")
 
       tbl <- fetch(path)
       if(is.null(tbl)) {
@@ -61,7 +61,7 @@ getBillSponsors <- function(biennium, billId, paired = TRUE, type = c("df", "lis
     for(bill in 1:nrow(request)) {
       path <- paste(prefix,
                     "legislationservice.asmx/GetSponsors?biennium=",
-                    request[bill,1], "&billId=", request[bill,2], sep = "")
+                    request[bill,1], "&billId=", gsub(" ", "%20", request[bill,2]), sep = "")
 
       tbl <- fetch(path)
       if(is.null(tbl)) {
@@ -82,7 +82,7 @@ getBillSponsors <- function(biennium, billId, paired = TRUE, type = c("df", "lis
     for(bill in 1:nrow(request)) {
       path <- paste(prefix,
                     "legislationservice.asmx/GetSponsors?biennium=",
-                    request[bill,1], "&billId=", request[bill,2], sep = "")
+                    request[bill,1], "&billId=", gsub(" ", "%20", request[bill,2]), sep = "")
 
       tbl <- fetch(path)
       if(is.null(tbl)) {
